@@ -15,7 +15,7 @@
   flex-direction: column;
   justify-content: space-between;
   
-  /* Un patrón sutil de puntitos blancos para darle textura (opcional pero queda genial) */
+  /* Un patrón sutil de puntitos blancos para darle textura  */
   background-image: radial-gradient(#e2e8f0 2px, transparent 2px);
   background-size: 30px 30px;
 }
@@ -23,13 +23,13 @@
 /* --- 3. TÍTULOS Y TEXTOS --- */
 h1 {
   font-size: 1.2rem;
-  color: #3B4CCA; /* Azul Pokémon principal para el logo/título */
+  color: #3B4CCA; 
   font-weight: 900;
   margin-bottom: 10px;
 }
 
 h2, h3 {
-  color: #2D3748; /* Gris oscuro para subtítulos (no negro puro) */
+  color: #2D3748; 
   margin-bottom: 15px;
   font-weight: 700;
 }
@@ -44,7 +44,6 @@ header {
   flex-wrap: wrap;
   justify-content: space-between;
   align-items: center;
-  /* Hacemos que el texto del header destaque un poco */
   font-weight: 700;
   color: #4A5568; 
 }
@@ -54,27 +53,27 @@ main {
   margin: 20px auto; /* Lo centramos automáticamente */
   width: 90%;
   max-width: 1000px; /* Para que no se estire demasiado en PC */
-  background-color: #FFFFFF; /* Fondo blanco puro */
-  border-radius: 24px; /* Bordes MUY redondeados */
+  background-color: #FFFFFF;
+  border-radius: 24px; 
   box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05); /* Sombra suave y moderna */
-  border: none; /* Quitamos el borde dashed retro */
+  border: none; 
   text-align: center;
-  padding: 40px 20px; /* Un poco más de aire por dentro */
+  padding: 40px 20px; 
 }
 
 footer {
   text-align: center;
-  color: #A0AEC0; /* Gris clarito para el footer */
+  color: #A0AEC0; 
   font-size: 0.9rem;
   font-weight: 700;
 }
 
 /* --- 5. BOTONES MODERNOS Y GAMIFICADOS --- */
 .home button, .choose button, .dashboard button {
-  background-color: #FFCB05; /* Amarillo vibrante */
-  color: #333333; /* Texto oscuro */
-  border: none; /* Sin bordes */
-  border-radius: 30px; /* Forma de "píldora" */
+  background-color: #FFCB05;
+  color: #333333;
+  border: none; 
+  border-radius: 30px; 
   padding: 14px 28px;
   font-size: 1.1rem;
   font-weight: 900;

@@ -46,7 +46,7 @@ useEffect(() => {
 
     //para que aparezca la ventana emergente de aviso de abrir un nuevo huevo
     // Dentro de tu componente Dashboard
-    // 1. Definimos la lógica de evolución
+    // Definimos la lógica de evolución
     const revisarEvolucion = (nivelAntiguo, nivelNuevo) => {
     const linea = POKEDEX[mascotaGlobal];
     const nivelMax = linea[linea.length - 1].nivelReq;

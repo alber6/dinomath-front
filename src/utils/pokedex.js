@@ -1,6 +1,6 @@
 // Para las evoluciones
 //cuando se quiera conseguir más pokemons y sus evoluciones usaremos la pokeapi
-// en tipo planta se ha  bajado el nivel de evolucion para que se peda ver más rapidos las evoluciones y los efectos
+// en tipo planta se ha  bajado el nivel de evolucion para que se pueda ver más rapidos las evoluciones y los efectos
 
 export const POKEDEX = {
 
@@ -21,8 +21,8 @@ export const POKEDEX = {
   ],
   pidgey: [
     { nivelReq: 1, id: 16, nombre: 'Pidgey', tipo: 'normal', egg: 'normal' },
-    { nivelReq: 3, id: 17, nombre: 'Pidgeotto' },
-    { nivelReq: 4, id: 18, nombre: 'Pidgeot' }
+    { nivelReq: 2, id: 17, nombre: 'Pidgeotto' },
+    { nivelReq: 3, id: 18, nombre: 'Pidgeot' }
   ],
   pikachu: [
     { nivelReq: 1, id: 172, nombre: 'Pichu', tipo: 'electrico', egg: 'electric' },

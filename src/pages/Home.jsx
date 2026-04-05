@@ -1,5 +1,5 @@
 import React, { useContext } from "react";
-import { Link, Navigate, useSearchParams } from "react-router-dom";
+import { Link, Navigate } from "react-router-dom";
 import { GameContext } from "../context/GameContext";
 import { AuthContext} from "../context/AuthContext";
 import { useNavigate } from "react-router-dom";

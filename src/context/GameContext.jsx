@@ -3,7 +3,6 @@ import { AuthContext } from "./AuthContext";
 import { POKEDEX } from "../utils/pokedex";
 import { useNavigate } from "react-router-dom";
 
-//DE MOMENTO NO LO VOY A EXPORTAR 
 export const GameContext = createContext();
 // crear el provider que en el prop tendrá n elementos 
 const GameProvider = ({ children }) => {
@@ -117,7 +116,7 @@ const GameProvider = ({ children }) => {
         localStorage.removeItem('mascotaXp');
         localStorage.removeItem('mascotaNivel');
     }
-    //añadimos async ya que se comunica con el backend y asi confirmamos que ha borrado todo antes de cambiar de pantalla
+
     const reinicioPartida = () => {
         // ponemos datos como al inicio y borramos datos en el local
         setMascotaGlobal(null);
@@ -165,7 +164,7 @@ const GameProvider = ({ children }) => {
 
     //añadimos una restriccion para que aparezca la opcion de adoptar un huevo solo cuando se llegue al nivel máximo o cuando el usuario no tenga mascota
         let familiasCompletadas = 0;
-        // 1. Contamos cuántos Pokémon del usuario han llegado a su nivel máximo
+        // Contamos cuántos Pokémon del usuario han llegado a su nivel máximo
         if (user && user.pets) {
             user.pets.forEach(pet => {
                 // Buscamos la línea evolutiva de cada mascota que tiene el usuario
@@ -179,11 +178,11 @@ const GameProvider = ({ children }) => {
                 }
             });
         }
-        // 2. Calculamos los espacios disponibles: 1 hueco inicial + 1 extra por cada familia completada
+        // Calculamos los espacios disponibles: 1 hueco inicial + 1 extra por cada familia completada
         const limiteMascotas = 1 + familiasCompletadas;
         const mascotasActuales = user?.pets?.length || 0;
 
-        // 3. LA NUEVA REGLA DE ORO: Solo puede adoptar si tiene menos mascotas que su límite
+        // Solo puede adoptar si tiene menos mascotas que su límite
         const puedeAdoptar = mascotasActuales < limiteMascotas;
 
     return (

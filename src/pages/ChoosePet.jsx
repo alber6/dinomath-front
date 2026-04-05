@@ -13,7 +13,7 @@ const ChoosePet = () => {
         const { elegirMascota, puedeAdoptar } = useContext(GameContext)
         const { user } = useContext(AuthContext)
 
-        // EXPLICAR ESTO 
+        // conseguir el nombre de las mascotas que tiene el usuario y sino me das un array vacío, ponemos ? para que si no sale nada, aparezca undefined en vez de saltar un error
         const mascotasConseguidas = user?.pets?.map(mascota => mascota.nombre) || [];
         
         const confirmarEleccion = () => {
@@ -21,20 +21,18 @@ const ChoosePet = () => {
 
             // Metemos la mascota elegida en la mochila global
             elegirMascota(mascotaSeleccionada);
-          
-            // vamos a Dashboard
             navigate('/dashboard');
         }
         //añadimos esto para que no puedan entrar a /choose desde la barra del navegador
         useEffect(() => {
-            // REGLA 1: Si el usuario todavía no ha cargado del todo, esperamos en silencio.
+            // Si el usuario todavía no ha cargado del todo, esperamos en silencio.
             if (!user) return;
 
-            // REGLA 2: Si la mochila del usuario está VACÍA, es una partida nueva. 
-            // Le damos pase VIP para quedarse en la Guardería, pase lo que pase.
+            // Si la mochila del usuario está VACÍA, es una partida nueva. 
+            // Le damos pase VIP para quedarse, pase lo que pase.
             if (!user.pets || user.pets.length === 0) return;
 
-            // REGLA 3: Si ya tiene Pokémon en la mochila, entonces SÍ aplicamos la seguridad estricta.
+            // Si ya tiene Pokémon en la mochila, entonces SÍ aplicamos la seguridad estricta.
             if (!puedeAdoptar) {
                 navigate("/dashboard");
             }

@@ -6,14 +6,11 @@
   gap: 20px;
 }
 
-
-
 .datosPet {
     display: flex;
     flex-direction: column;
     align-items: center;
 }
-
 
 progress {
   width: 200px;

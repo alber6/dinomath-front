@@ -1,9 +1,7 @@
-/* --- CHOOSE.CSS --- */
-
 .eggCard {
-  background-color: #FFFFFF; /* Fondo blanco */
-  border: 3px solid #E2E8F0; /* Borde gris suave por defecto */
-  border-radius: 20px; /* Bordes muy redondeados */
+  background-color: #FFFFFF; 
+  border: 3px solid #E2E8F0; 
+  border-radius: 20px; 
   padding: 30px 20px;
   transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1); 
   display: flex;
@@ -12,13 +10,13 @@
   gap: 15px;
   position: relative;
   overflow: hidden;
-  box-shadow: 0 4px 15px rgba(0,0,0,0.05); /* Sombra muy suave */
+  box-shadow: 0 4px 15px rgba(0,0,0,0.05); 
 }
 
 .eggCard:hover {
   transform: translateY(-10px); /* Sube un poco al pasar el ratón */
-  border-color: #FFCB05; /* Se vuelve amarillo al hacer hover */
-  box-shadow: 0 15px 30px rgba(255, 203, 5, 0.2); /* Sombra cálida */
+  border-color: #FFCB05; 
+  box-shadow: 0 15px 30px rgba(255, 203, 5, 0.2); 
 }
 
 /* Efecto de luz de fondo (lo suavizamos para que encaje con el fondo blanco) */
@@ -64,7 +62,7 @@
 
 /* Estilo para cuando haces clic en un botón de huevo */
 .btn-juego.seleccionado {
-  background-color: #3B4CCA; /* Azul Pokémon */
+  background-color: #3B4CCA; 
   color: white;
   border: 3px solid #3B4CCA;
   transform: translateY(-2px) scale(1.05);
