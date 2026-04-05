@@ -20,12 +20,12 @@ export const POKEDEX = {
     { nivelReq: 3, id: 9, nombre: 'Blastoise' }
   ],
   pidgey: [
-    { nivelReq: 1, id: 16, nombre: 'Pidgey', tipo: 'normal', egg: 'normal' },
+    { nivelReq: 1, id: 16, nombre: 'Pidgey', tipo: 'normal', egg: '/eggNormal.png' },
     { nivelReq: 2, id: 17, nombre: 'Pidgeotto' },
     { nivelReq: 3, id: 18, nombre: 'Pidgeot' }
   ],
   pikachu: [
-    { nivelReq: 1, id: 172, nombre: 'Pichu', tipo: 'electrico', egg: 'electric' },
+    { nivelReq: 1, id: 172, nombre: 'Pichu', tipo: 'electrico', egg: '/eggElectrico.png' },
     { nivelReq: 2, id: 25, nombre: 'Pikachu' },
     { nivelReq: 3, id: 26, nombre: 'Raichu' }
   ]

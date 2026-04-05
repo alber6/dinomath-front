@@ -68,10 +68,22 @@ const Register = () => {
                     {errors.nombre && <p>{errors.nombre.message}</p>}
                 </div>
                 <div>
-                    <label>Curso:</label>
+                <label>Curso:</label>
                     <input 
                         type="number" 
-                        {...register("curso", { required: true })} 
+                        min="1"
+                        max="6"
+                        {...register("curso", { 
+                            required: "El curso es obligatorio",
+                            min: {
+                                value: 1,
+                                message: "El curso mínimo es 1º"
+                            },
+                            max: {
+                                value: 6,
+                                message: "El curso máximo es 6º"
+                            }
+                        })} 
                     />
                     {errors.curso && <p>{errors.curso.message}</p>}
                 </div>
