@@ -1,0 +1,164 @@
+
+#container-dashboard {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 40px;
+}
+
+#petInfo {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+}
+
+#petImg, #petInfo {
+  flex: 1; /* Ambas cajas ocuparán el mismo espacio (50/50) */
+  text-align: center;
+}
+
+#form{
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+#operation{
+    display: flex;
+    gap: 5px;
+    justify-content: center;
+    align-content: end;
+    align-items: end;
+}
+
+#operation input {
+    width: 150px;
+    height: 50px;
+    background-color: #000;
+    color: #ffffff; 
+    border: 2px solid #555;
+    padding: 15px;
+    font-size: 2rem;
+    font-family: inherit;
+    transition: all 0.3s ease;
+    outline: none;
+}
+#operation input:focus {
+  border-color: #cdcdcd;
+  box-shadow: 0 0 20px #cdcdcd, inset 0 0 10px #cdcdcd;
+  transform: scale(1.05);
+}
+
+@keyframes evolucionRetro {
+  0% { filter: brightness(1); transform: scale(1); }
+  20% { filter: brightness(20) drop-shadow(0 0 50px white); transform: scale(1.1); }
+  80% { filter: brightness(20) drop-shadow(0 0 50px white); transform: scale(1.1); }
+  100% { filter: brightness(1); transform: scale(1); }
+}
+/* Solo aplicamos esto directamente a la etiqueta <img> */
+.evolucion-animacion {
+  animation: evolucionRetro 2s ease-in-out;
+}
+
+#goToHome {
+    padding: 3px;
+    font-size: 0.5rem;
+}
+
+/* Fondo y tarjeta */
+.modal-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.7);
+  box-shadow: #ffffff;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+}
+
+.modal-content {
+  background: white;
+  padding: 30px;
+  border-radius: 15px;
+  text-align: center;
+  max-width: 500px;
+  border: 4px solid #fbd000;
+}
+
+.modal-content p, .modal-content h2 {
+  color: #000;
+}
+
+/* Contenedor y estilo base de botones */
+.modal-buttons {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin-top: 20px;
+}
+
+.modal-buttons button {
+  padding: 12px;
+  border-radius: 8px;
+  border: none;
+  font-weight: bold;
+  transition: transform 0.1s;
+}
+
+.modal-buttons button:active {
+  transform: scale(0.95); /* Efecto de pulsado */
+}
+
+
+@media (max-width: 990px) {
+  #container-dashboard {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+  }
+}
+
+@media (max-width: 600px) {
+    #petImg > img {
+        width: 300px;
+    }
+    .dashboard > h2, #petInfo > h3{
+        font-size: 1rem;
+    }
+    .dashboard > p, #petInfo > p, #operation > p{
+        font-size: 0.5rem;
+    }
+    #operation input {
+    width: 100px;
+    height: 40px;
+    }
+}
+
+@media (max-width: 430px) {
+    #petImg > img {
+        width: 200px;
+    }
+    .dashboard > h2, #petInfo > h3{
+        font-size: 0.6rem;
+    }
+    .dashboard > p, #petInfo > p, #operation > p{
+        font-size: 0.3rem;
+    }
+
+    #operation{
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    justify-content: center;
+    align-items: center;
+    }
+
+    #operation input {
+        width: 90px;
+        height: 20px;
+    }
+    .dashboard button{
+        padding: 5px;
+    }
+}

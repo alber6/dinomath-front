@@ -1,0 +1,86 @@
+/* --- COLECCION.CSS --- */
+
+.familia-row {
+  display: flex;
+  gap: 20px;
+  margin-bottom: 40px;
+  justify-content: center;
+  flex-wrap: wrap; /* Para que en móviles bajen a la siguiente línea */
+}
+
+/* ESTILO BASE DE LA TARJETA */
+.pokedex-card {
+  border-radius: 20px;
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+  width: 200px; /* Un ancho fijo queda mejor para cartas */
+  transition: all 0.3s ease;
+}
+
+.pokedex-card h3 {
+  margin: 0;
+  font-size: 1.1rem;
+  text-transform: capitalize;
+}
+
+/* TARJETA DESBLOQUEADA */
+.pokedex-card.desbloqueado {
+  background-color: #FFFFFF;
+  border: 3px solid #3B4CCA; /* Borde azul Pokémon */
+  box-shadow: 0 8px 20px rgba(59, 76, 202, 0.15);
+}
+
+.pokedex-card.desbloqueado h3 {
+  color: #3B4CCA;
+}
+
+/* TARJETA BLOQUEADA */
+.pokedex-card.bloqueado {
+  background-color: #EDF2F7; /* Gris claro */
+  border: 3px dashed #CBD5E0; /* Borde punteado gris */
+  box-shadow: none;
+}
+
+.pokedex-card.bloqueado h3 {
+  color: #A0AEC0;
+}
+
+/* Contenedor y efecto de imágenes */
+.pokedex-img-container {
+  width: 100px;
+  height: 150px;
+  margin: 0 auto;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.pokedex-img {
+  width: 100%;
+  height: auto;
+  transition: transform 0.3s ease;
+}
+
+/* Efecto sombra negra para bloqueados */
+.bloqueado .pokedex-img {
+  filter: brightness(0); 
+  opacity: 0.3; /* Aún más clarito para que quede elegante en fondo claro */
+}
+
+.desbloqueado .pokedex-img {
+  filter: drop-shadow(0 4px 6px rgba(0, 0, 0, 0.15));
+}
+
+.desbloqueado:hover .pokedex-img {
+  transform: scale(1.15) translateY(-5px); /* Flota al pasar el ratón */
+}
+
+/* Texto de la tarjeta */
+.pokedex-txt {
+  font-size: 0.8rem;
+  color: #718096;
+  font-weight: bold;
+}
