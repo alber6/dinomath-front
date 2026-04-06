@@ -5,6 +5,7 @@ import { GameContext } from "../context/GameContext.jsx";
 import { POKEDEX } from "../utils/pokedex.js"
 import "./Coleccion.css"
 
+
 const Coleccion = () => {
     //sacamos al usuario logueado para leer su informacion 
     const { user } = useContext(AuthContext);
@@ -21,7 +22,7 @@ const Coleccion = () => {
     }
 
     return (
-        <div className="coleccion-container">
+        <div className="coleccion">
             <h2>Pokédex y Álbum 📖</h2>
             
             <div className="pokedex-grid">
@@ -91,16 +92,17 @@ const Coleccion = () => {
                     );
                 })}
             </div>
-
-            <Link to="/dashboard">
-                <button className="btn-volver">Volver al Centro</button>
-            </Link>
-            {/* Solo si puedeAdoptar es true, enseñamos el botón */}
-            {puedeAdoptar && (
+                <Link to="/dashboard">
+                <button>Volver al Centro</button>
+                </Link>
+                {/* Solo si puedeAdoptar es true, enseñamos el botón */}
+                {puedeAdoptar && (
                 <Link to="/choose">
-                    <button className="btn-adoptar">Adoptar Nuevo Huevo 🥚</button>
+                    <button>Adoptar Nuevo Huevo 🥚</button>
                 </Link>
             )}
+          
+            
         </div>
     );
 };

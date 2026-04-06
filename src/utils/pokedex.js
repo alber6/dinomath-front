@@ -28,6 +28,31 @@ export const POKEDEX = {
     { nivelReq: 1, id: 172, nombre: 'Pichu', tipo: 'electrico', egg: '/eggElectrico.png' },
     { nivelReq: 2, id: 25, nombre: 'Pikachu' },
     { nivelReq: 3, id: 26, nombre: 'Raichu' }
+  ],
+  caterpie: [
+    { nivelReq: 1, id: 10, nombre: 'Caterpie', tipo: 'bicho', egg: '/eggBicho.png' },
+    { nivelReq: 2, id: 11, nombre: 'Metapod' },
+    { nivelReq: 3, id: 12, nombre: 'Butterfree' }
+  ],
+  weedle: [
+    { nivelReq: 1, id: 13, nombre: 'Weedle', tipo: 'veneno', egg: '/eggVeneno.png' },
+    { nivelReq: 2, id: 14, nombre: 'Kakuna' },
+    { nivelReq: 3, id: 15, nombre: 'Beedrill' }
+  ],
+  machop: [
+    { nivelReq: 1, id: 66, nombre: 'Machop', tipo: 'lucha', egg: '/eggLucha.png' },
+    { nivelReq: 2, id: 67, nombre: 'Machoke' },
+    { nivelReq: 3, id: 68, nombre: 'Machamp' }
+  ],
+  gastly: [
+    { nivelReq: 1, id: 92, nombre: 'Gastly', tipo: 'fantasma', egg: '/eggFantasma.png' },
+    { nivelReq: 2, id: 93, nombre: 'Haunter' },
+    { nivelReq: 3, id: 94, nombre: 'Gengar' }
+  ],
+  dratini: [
+    { nivelReq: 1, id: 147, nombre: 'Dratini', tipo: 'dragon', egg: '/eggDragon.png' },
+    { nivelReq: 2, id: 148, nombre: 'Dragonair' },
+    { nivelReq: 3, id: 149, nombre: 'Dragonite' }
   ]
 
 };

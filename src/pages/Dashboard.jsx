@@ -11,7 +11,7 @@ import { POKEDEX } from "/src/utils/pokedex.js"
 // todo el juego ocurre aquí, aparece la mascota, el nivel, las operaciones y el form
 const Dashboard = () => {
     const { mascotaGlobal, xp, nivel, ganarExperiencia, puedeAdoptar } = useContext(GameContext);
-    const { num1, num2, nuevasSumas, comprobarResultado } = useMathsEngine();
+    const { num1, num2, operador, nuevaOperacion, comprobarResultado } = useMathsEngine();
     const navigate = useNavigate()
 
     //el formulario
@@ -25,8 +25,8 @@ const Dashboard = () => {
     
     //como useEffec hace que se ejecute nuevasSumas cada vez que esta función cambia, necesitamos que la función nuevasSumas tenga un useCallback para memorizar la función y no se ejecute todo el rato.
     useEffect(() => {
-        nuevasSumas()
-    }, [nuevasSumas])
+        nuevaOperacion()
+    }, [nuevaOperacion])
 
 useEffect(() => {
     if (!mascotaGlobal) return;
@@ -72,7 +72,7 @@ useEffect(() => {
       }
       // 3. Pasamos ese dato a la función de revisión
       revisarEvolucion(nivel, nivelFuturo);
-      nuevasSumas();   // Inventamos otra suma
+      nuevaOperacion();   // Inventamos otra suma
       reset();          // Borramos lo que escribió para que la casilla quede limpia
     } else {
       setMensajeFeedback('Mmm... casi. ¡Vuelve a intentarlo! 💪');
@@ -103,7 +103,7 @@ useEffect(() => {
         {/* react-hook-form */}
                 <form onSubmit={handleSubmit(alEnviarRespuesta)} id="form">
                     <div id="operation">
-                         <p>{num1} + {num2} = </p>
+                         <p>{num1} {operador} {num2} = </p>
                         <input 
                         type="number"
                         placeholder=" Num"

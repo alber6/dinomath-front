@@ -3,6 +3,7 @@ import { useContext, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { AuthContext } from "../context/AuthContext";
 
+
 const Login = () => {
     // coger las herramientas de react hook form
     const { register, handleSubmit, formState: { errors} } = useForm();
@@ -47,7 +48,7 @@ const Login = () => {
     };
 
     return (
-<div className="login-container">
+<div className="login">
             <h2>Iniciar Sesión 🎮</h2>
             <form onSubmit={handleSubmit(onSubmit)}>
                 <div>

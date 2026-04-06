@@ -2,7 +2,6 @@ import { useForm } from "react-hook-form";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 
-
 const Register = () => {
     // coger las herramientas de react hook form
     const { register, handleSubmit, formState: { errors} } = useForm();
@@ -38,7 +37,7 @@ const Register = () => {
     };
 
         return (
-        <div className="register-container">
+        <div className="register">
             <h2>Registro de usuario 🎮</h2>
             <form onSubmit={handleSubmit(onSubmit)}>
                 <div>
@@ -71,13 +70,13 @@ const Register = () => {
                 <label>Curso:</label>
                     <input 
                         type="number" 
-                        min="1"
+                        min="5"
                         max="6"
                         {...register("curso", { 
                             required: "El curso es obligatorio",
                             min: {
                                 value: 1,
-                                message: "El curso mínimo es 1º"
+                                message: "El curso mínimo es 5º"
                             },
                             max: {
                                 value: 6,

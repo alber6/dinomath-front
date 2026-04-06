@@ -1,9 +1,11 @@
 
-#container-dashboard {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    gap: 40px;
+.dashboard {
+  margin: auto; 
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
 }
 
 #petInfo {
@@ -109,6 +111,7 @@
 .modal-buttons button:active {
   transform: scale(0.95); /* Efecto de pulsado */
 }
+
 
 
 @media (max-width: 990px) {

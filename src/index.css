@@ -5,17 +5,25 @@
   padding: 0;
 }
 
+html, body {
+  margin: 0;
+  padding: 0;
+  width: 100vw;
+  height: 100vh;
+  overflow: hidden; /* Bloquea el scroll general del navegador */
+}
+
 /* --- 2. CONTENEDOR PRINCIPAL (.App) --- */
 .App {
-  /* Fondo general gris-azulado muy suave en lugar de negro */
   background-color: #F0F4F8; 
-  color: #333333; /* Texto principal oscuro para que se lea bien */
-  min-height: 100vh;
+  color: #333333; 
+  height: 100vh; 
+  width: 100vw;  
+  overflow: hidden;
   display: flex;
   flex-direction: column;
   justify-content: space-between;
   
-  /* Un patrón sutil de puntitos blancos para darle textura  */
   background-image: radial-gradient(#e2e8f0 2px, transparent 2px);
   background-size: 30px 30px;
 }
@@ -48,18 +56,36 @@ header {
   color: #4A5568; 
 }
 
-/* EL CAMBIO ESTRELLA: El 'main' pasa de ser un borde punteado a una tarjeta flotante blanca */
+/* LA TARJETA BLANCA FLOTANTE */
 main {
-  margin: 20px auto; /* Lo centramos automáticamente */
+  margin: 10px auto; 
   width: 90%;
-  max-width: 1000px; /* Para que no se estire demasiado en PC */
+  max-width: 1000px; 
   background-color: #FFFFFF;
   border-radius: 24px; 
-  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05); /* Sombra suave y moderna */
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05); 
   border: none; 
   text-align: center;
-  padding: 40px 20px; 
+  padding: 20px;
+  
+  flex-grow: 1; 
+  overflow-y: auto; 
+  overflow-x: hidden; 
+
+  /* Añadido para que los hijos (como el dashboard) se puedan centrar */
+  display: flex;
+  flex-direction: column;
 }
+
+.login, .register {
+  margin: auto; 
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
 
 footer {
   text-align: center;
@@ -69,7 +95,7 @@ footer {
 }
 
 /* --- 5. BOTONES MODERNOS Y GAMIFICADOS --- */
-.home button, .choose button, .dashboard button {
+.home button, .choose button, .dashboard button, .coleccion button {
   background-color: #FFCB05;
   color: #333333;
   border: none; 
@@ -81,28 +107,25 @@ footer {
   letter-spacing: 1px;
   transition: all 0.1s ease;
   
-  /* Efecto 3D gamificado (una sombra sólida debajo del mismo color pero más oscuro) */
   box-shadow: 0 6px 0px #D4A600; 
-  margin: 10px; /* Separación entre botones si hay varios */
+  margin: 10px; 
 }
 
-.home button:hover, .choose button:hover, .dashboard button:hover {
-  background-color: #FFD633; /* Brilla un poco al pasar el ratón */
-  transform: translateY(-2px); /* Sube un poquito */
-  box-shadow: 0 8px 0px #D4A600; /* La sombra se hace más grande */
+.home button:hover, .choose button:hover, .dashboard button:hover, .coleccion button:hover {
+  background-color: #FFD633; 
+  transform: translateY(-2px); 
+  box-shadow: 0 8px 0px #D4A600; 
 }
 
-/* Efecto al hacer clic: Se aplasta físicamente */
-.home button:active, .choose button:active, .dashboard button:active {
-  transform: translateY(6px); /* Baja del todo */
-  box-shadow: 0 0px 0px #D4A600; /* Pierde la sombra 3D */
+.home button:active, .choose button:active, .dashboard button:active, .coleccion button:active {
+  transform: translateY(6px); 
+  box-shadow: 0 0px 0px #D4A600; 
 }
 
-/* --- 6. RESPONSIVO --- */
+
+/* --- 7. RESPONSIVO --- */
 @media (max-width: 1040px) {
   main {
-    display: flex;
-    flex-direction: column;
     margin: 20px;
     padding: 20px 10px;
   }
