@@ -15,7 +15,7 @@ const Register = () => {
     const onSubmit = async (data) => {
         try {
             //hacer la llamada POST al backend
-            const response = await fetch("http://localhost:3000/api/v1/users/register", {
+            const response = await fetch("https://backend-mathpets.onrender.com/api/v1/users/register", {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json"

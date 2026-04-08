@@ -20,7 +20,7 @@ const Login = () => {
     const onSubmit = async (data) => {
         try {
             //hacer la llamada POST al backend
-            const response = await fetch("http://localhost:3000/api/v1/users/login", {
+            const response = await fetch("https://backend-mathpets.onrender.com/api/v1/users/login", {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json"
