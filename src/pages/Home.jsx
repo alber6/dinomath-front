@@ -52,12 +52,12 @@ const Home = () => {
                     <p><strong>Para empezar a jugar y guardar a tu mascota en la nube, necesitas identificarte.</strong></p>
                     <div className="botones">
                         <Link to="/login">
-                            <button style={{ backgroundColor: "#4CAF50", color: "white", padding: "10px 20px", fontSize: "1.2rem", borderRadius: "8px" }}>
+                            <button>
                                 Iniciar Sesión
                             </button>
                         </Link>
                         <Link to="/register">
-                            <button style={{ backgroundColor: "#4CAF50", color: "white", padding: "10px 20px", fontSize: "1.2rem", borderRadius: "8px" }}>
+                            <button>
                                 Registrarse
                             </button>
                         </Link>

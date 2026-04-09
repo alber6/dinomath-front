@@ -8,11 +8,19 @@
   align-items: center;
 }
 
-.botones {
+.botones{
   display: flex;
   flex-wrap: wrap;
   justify-content: center;
   gap: 20px;
+}
+
+.botones button{
+  background-color:#4CAF50; 
+  color: white;
+  padding: 10px 20px;
+  font-size: 1.2rem;
+  border-radius: 8px;
 }
 
 .datosPet {
@@ -28,15 +36,28 @@ progress {
   border-radius: 5px;
 }
 
-@media (max-width: 420px) {
-    button{
-        padding: 10px;
-        font-size: 0.6rem
+@media (max-width: 430px) {
+    .home, .choose{
+        font-size: 0.8rem
     }
+    .home > h1, .choose > h1{
+        font-size: 0.8rem
+    }
+    .botones button{
+      padding: 5px 10px;
+      font-size: 1rem;
+}
+}
+
+@media (max-width: 360px) {
     .home, .choose{
         font-size: 0.6rem
     }
     .home > h1, .choose > h1{
         font-size: 0.6rem
     }
+    .botones button{
+      padding: 2px 5px;
+      font-size: 0.8rem;
+}
 }

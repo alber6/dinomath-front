@@ -5,27 +5,20 @@
   padding: 0;
 }
 
-html, body {
-  margin: 0;
-  padding: 0;
-  width: 100vw;
-  height: 100vh;
-  overflow: hidden; /* Bloquea el scroll general del navegador */
-}
-
 /* --- 2. CONTENEDOR PRINCIPAL (.App) --- */
 .App {
   background-color: #F0F4F8; 
   color: #333333; 
-  height: 100vh; 
-  width: 100vw;  
+  height: 100vh;
+  width: 100vw;
   overflow: hidden;
   display: flex;
   flex-direction: column;
   justify-content: space-between;
-  
   background-image: radial-gradient(#e2e8f0 2px, transparent 2px);
   background-size: 30px 30px;
+  overflow-y: auto; 
+  overflow-x: hidden; 
 }
 
 /* --- 3. TÍTULOS Y TEXTOS --- */
@@ -48,8 +41,8 @@ header, main, footer {
 }
 
 header {
+  height: 15vh;
   display: flex;
-  flex-wrap: wrap;
   justify-content: space-between;
   align-items: center;
   font-weight: 700;
@@ -58,36 +51,35 @@ header {
 
 /* LA TARJETA BLANCA FLOTANTE */
 main {
-  margin: 10px auto; 
+  display: flex;
+  margin: auto;
   width: 90%;
-  max-width: 1000px; 
+  height: 70vh;
   background-color: #FFFFFF;
   border-radius: 24px; 
   box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05); 
-  border: none; 
   text-align: center;
   padding: 20px;
-  
-  flex-grow: 1; 
-  overflow-y: auto; 
-  overflow-x: hidden; 
-
-  /* Añadido para que los hijos (como el dashboard) se puedan centrar */
-  display: flex;
-  flex-direction: column;
+  overflow-y: auto;
 }
 
 .login, .register {
   margin: auto; 
-  width: 100%;
+  width: 90%;
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
+  gap: 20px;
 }
 
+.login div input, .register div input {
+  width: 250px;
+  margin-bottom: 30px;
+}
 
 footer {
+  height: 6vh;
   text-align: center;
   color: #A0AEC0; 
   font-size: 0.9rem;
@@ -106,7 +98,6 @@ footer {
   text-transform: uppercase;
   letter-spacing: 1px;
   transition: all 0.1s ease;
-  
   box-shadow: 0 6px 0px #D4A600; 
   margin: 10px; 
 }
@@ -124,18 +115,60 @@ footer {
 
 
 /* --- 7. RESPONSIVO --- */
-@media (max-width: 1040px) {
-  main {
-    margin: 20px;
-    padding: 20px 10px;
-  }
+@media (max-width: 600px) {
+    .home button, .choose button, .dashboard button, .coleccion button {
+      padding: 10px 18px;
+      font-size: 0.8rem;
+      margin: 10px;
+    }
+    #petImg > img {
+        width: 450px;
+    }
+    .dashboard > h2, #petInfo > h3{
+        font-size: 1.2rem;
+    }
+    .dashboard > p, #petInfo > p, #operation > p{
+        font-size: 1rem;
+    }
+}
+
+@media (max-width: 560px) {
+    .home button, .choose button, .dashboard button, .coleccion button {
+      font-size: 0.6rem;
+    }
+    header h1 {
+      font-size: 0.8rem;
+    }
+    .stats-jugador p {
+      /* para que las etiquetas p se junten */
+      margin: 0;
+      padding: 2px;
+      font-size: 0.5rem;
+    }
+    #petImg > img {
+        width: 250px;
+    }
+    .dashboard > h2, #petInfo > h3{
+        font-size: 0.8rem;
+    }
+    .dashboard > p, #petInfo > p, #operation > p{
+        font-size: 0.5rem;
+    }
+    .dashboard button{
+        padding: 2px;
+    }
+    .login div input {
+      width: 200px;
+    }
+    footer{
+      font-size: 0.5rem;
+    }
 }
 
 @media (max-width: 340px) {
-  header, footer {
+  header{
+    display: flex;
     flex-direction: column;
-    justify-content: center;
-    gap: 10px;
-    font-size: 0.8rem;
   }
+
 }

@@ -1,11 +1,18 @@
 
 .dashboard {
-  margin: auto; 
+  margin: auto;
   width: 100%;
   display: flex;
   flex-direction: column;
-  justify-content: center;
+}
+
+#container-dashboard{
+  width: 100%;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 50px;
   align-items: center;
+  justify-content: space-between;
 }
 
 #petInfo {
@@ -34,16 +41,13 @@
 }
 
 #operation input {
-    width: 150px;
+    width: 100px;
     height: 50px;
     background-color: #000;
     color: #ffffff; 
     border: 2px solid #555;
-    padding: 15px;
-    font-size: 2rem;
-    font-family: inherit;
+    border-radius: 15px;
     transition: all 0.3s ease;
-    outline: none;
 }
 #operation input:focus {
   border-color: #cdcdcd;
@@ -112,56 +116,9 @@
   transform: scale(0.95); /* Efecto de pulsado */
 }
 
-
-
-@media (max-width: 990px) {
-  #container-dashboard {
-    display: flex;
-    flex-direction: column;
-    gap: 20px;
-  }
-}
-
-@media (max-width: 600px) {
-    #petImg > img {
-        width: 300px;
-    }
-    .dashboard > h2, #petInfo > h3{
-        font-size: 1rem;
-    }
-    .dashboard > p, #petInfo > p, #operation > p{
-        font-size: 0.5rem;
-    }
-    #operation input {
-    width: 100px;
-    height: 40px;
-    }
-}
-
-@media (max-width: 430px) {
-    #petImg > img {
-        width: 200px;
-    }
-    .dashboard > h2, #petInfo > h3{
-        font-size: 0.6rem;
-    }
-    .dashboard > p, #petInfo > p, #operation > p{
-        font-size: 0.3rem;
-    }
-
-    #operation{
-    display: flex;
-    flex-direction: column;
-    gap: 2px;
-    justify-content: center;
-    align-items: center;
-    }
-
-    #operation input {
-        width: 90px;
-        height: 20px;
-    }
-    .dashboard button{
-        padding: 5px;
+@media (max-width: 560px) {
+    #operation > input {
+      height: 35px;
+      width: 80px;
     }
 }

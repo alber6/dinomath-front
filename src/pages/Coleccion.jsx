@@ -77,7 +77,8 @@ const Coleccion = () => {
                                                 <span className="etiqueta-activa">Entrenando 🏃‍♂️</span>
                                             ) : esEquipable ? (
                                                 <button 
-                                                    className="btn-equipar"
+                                                    className="btn-equipar" 
+                                                    id="btn-cards"
                                                     onClick={() => handleEquiparMascota(nombreFamilia, nivelUsuario, xpUsuario)}
                                                 >
                                                     Equipar (Nvl {nivelUsuario})

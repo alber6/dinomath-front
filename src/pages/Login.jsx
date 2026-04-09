@@ -16,8 +16,10 @@ const Login = () => {
 
     // estado paraa guardar errores que nos dé el backend como puede ser la contraseña incorrecta
     const [ errorBackend, setErrorBackend ] = useState("");
+    const [ isLoading, SetisLoading ] = useState(false)
 
     const onSubmit = async (data) => {
+        SetisLoading(true)
         try {
             //hacer la llamada POST al backend
             const response = await fetch("https://backend-mathpets.onrender.com/api/v1/users/login", {
@@ -41,9 +43,11 @@ const Login = () => {
             } else {
                 // si falla, mostramos el mensaje del backend
                 setErrorBackend(result);
+                SetisLoading(false)
             }
         } catch (error) {
             setErrorBackend("Error al conectarse con el servidor. ❌❌")
+            SetisLoading(false)
         }
     };
 
@@ -73,7 +77,17 @@ const Login = () => {
                 {/* Si el backend nos dice que los datos están mal, sale aquí */}
                 {errorBackend && <p>{errorBackend}</p>}
 
-                <button type="submit">¡A Jugar!</button>
+                <button 
+                type="submit"
+                disabled= {isLoading}
+                style={{
+                    opacity: isLoading ? 0.7 : 1,
+                    cursor: isLoading ? 'wait' : 'pointer'
+                }}
+                >¡A Jugar!
+
+                {isLoading ? 'Conectando...⌛' : '¡A jugar!'}
+                </button>
             </form>
         </div>
     );

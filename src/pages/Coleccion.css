@@ -1,10 +1,14 @@
+.coleccion{
+  margin: auto;
+}
 
 .familia-row {
+  margin-top: 40px;
   display: flex;
   gap: 20px;
   margin-bottom: 40px;
   justify-content: center;
-  flex-wrap: wrap; /* Para que en móviles bajen a la siguiente línea */
+  flex-wrap: wrap;
 }
 
 /* ESTILO BASE DE LA TARJETA */
@@ -82,4 +86,29 @@
   font-size: 0.8rem;
   color: #718096;
   font-weight: bold;
+}
+
+@media (max-width: 600px) {
+  .pokedex-card {
+    width: 100px;
+    height: 250px;
+  }
+  .pokedex-card h3 {
+    margin: 0;
+    font-size: 0.5rem;
+  }
+
+  /* Contenedor y efecto de imágenes */
+  .pokedex-img-container {
+    width: 70px;
+    height: 180px;
+  }
+  .pokedex-card.bloqueado p, .pokedex-card.desbloqueado p, .etiqueta-activa  {
+    font-size: 0.5rem;
+  }
+
+  #btn-cards{
+    font-size: 0.5rem;
+    padding: 10px;
+  }
 }
