@@ -30,11 +30,9 @@ const Home = () => {
                             <Link to ="dashboard" >
                                 <button>Seguir aventura</button>
                             </Link>
-                            <hr></hr>
                             <button onClick={reinicioPartida}>
                                 Borrar partida
                             </button>
-                            <hr></hr>
                             <button onClick={handleLogout}>
                                 Salir de la aventura
                             </button>

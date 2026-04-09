@@ -86,7 +86,7 @@ const Login = () => {
                 }}
                 >¡A Jugar!
 
-                {isLoading ? 'Conectando...⌛' : '¡A jugar!'}
+                {isLoading ? 'Conectando...⌛' : ''}
                 </button>
             </form>
         </div>
