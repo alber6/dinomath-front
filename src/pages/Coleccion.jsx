@@ -74,14 +74,14 @@ const Coleccion = () => {
                                         {/* 3. La zona de botones. Solo se muestra en la fase correcta */}
                                         <div className="estado-mascota">
                                             {estaEntrenando ? (
-                                                <span className="etiqueta-activa">Entrenando 🏃‍♂️</span>
+                                                <span className="etiqueta-activa">Entrenando</span>
                                             ) : esEquipable ? (
                                                 <button 
                                                     className="btn-equipar" 
                                                     id="btn-cards"
                                                     onClick={() => handleEquiparMascota(nombreFamilia, nivelUsuario, xpUsuario)}
                                                 >
-                                                    Equipar (Nvl {nivelUsuario})
+                                                    Equipar
                                                 </button>
                                             ) : null}
                                         </div>

@@ -23,6 +23,12 @@
   transition: all 0.3s ease;
 }
 
+#btn-cards{
+  font-size: 0.8rem;
+  padding: 8px;
+  width: 150px;
+  }
+  
 .pokedex-card h3 {
   margin: 0;
   font-size: 1.1rem;
@@ -34,6 +40,7 @@
   background-color: #FFFFFF;
   border: 3px solid #3B4CCA; /* Borde azul Pokémon */
   box-shadow: 0 8px 20px rgba(59, 76, 202, 0.15);
+  padding: 10px 25px 10px 25px;
 }
 
 .pokedex-card.desbloqueado h3 {
@@ -62,7 +69,7 @@
 }
 
 .pokedex-img {
-  width: 100%;
+  width: 150px;
   height: auto;
   transition: transform 0.3s ease;
 }
@@ -88,10 +95,59 @@
   font-weight: bold;
 }
 
+@media (max-width: 760px){
+  .pokedex-card {
+    width: 180px;
+    height: 310px;
+  }
+  .pokedex-card h3 {
+    margin: 0;
+    font-size: 0.8rem;
+  }
+  /* Contenedor y efecto de imágenes */
+  .pokedex-img-container {
+    height: 150px;
+  }
+  .pokedex-img{
+    width: 120px;
+  }
+  .pokedex-card.bloqueado p, .pokedex-card.desbloqueado p, .etiqueta-activa  {
+    font-size: 0.8rem;
+  }
+
+  #btn-cards{
+    font-size: 0.5rem;
+    padding: 5px;
+    width: 80px;
+  }
+}
+
+@media (max-width: 690px){
+  .pokedex-card {
+    width: 150px;
+    height: 260px;
+  }
+    .pokedex-card h3 {
+    margin: 0;
+    font-size: 0.8rem;
+  }
+
+  /* Contenedor y efecto de imágenes */
+  .pokedex-img-container {
+    height: 100px;
+  }
+  .pokedex-img{
+    width: 100px;
+  }
+  .pokedex-card.bloqueado p, .pokedex-card.desbloqueado p, .etiqueta-activa  {
+    font-size: 0.7rem;
+  }
+}
+
 @media (max-width: 600px) {
   .pokedex-card {
-    width: 100px;
-    height: 250px;
+    width: 120px;
+    height: 210px;
   }
   .pokedex-card h3 {
     margin: 0;
@@ -100,15 +156,46 @@
 
   /* Contenedor y efecto de imágenes */
   .pokedex-img-container {
-    width: 70px;
-    height: 180px;
+    width: 100px;
+    height: 80px;
   }
   .pokedex-card.bloqueado p, .pokedex-card.desbloqueado p, .etiqueta-activa  {
     font-size: 0.5rem;
   }
+  .pokedex-card.desbloqueado {
+    padding: 5px;
+  }
 
   #btn-cards{
     font-size: 0.5rem;
-    padding: 10px;
+    padding: 2px;
   }
+}
+
+@media (max-width: 490px) {
+
+  .familia-row{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+  }
+  .pokedex-card {
+    width: 180px;
+    height: 250px;
+  }
+
+  /* Contenedor y efecto de imágenes */
+  .pokedex-img-container {
+    width: 130px;
+    height: 120px;
+  }
+
+  .pokedex-card.desbloqueado {
+    padding: 1px;
+  }
+  .pokedex-card.bloqueado p, .pokedex-card.desbloqueado p, .etiqueta-activa, .pokedex-card h3  {
+    font-size: 0.6rem;
+  }
+
 }
