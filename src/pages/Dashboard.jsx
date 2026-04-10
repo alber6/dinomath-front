@@ -2,7 +2,9 @@ import React, { useContext, useState, useEffect } from "react";
 import { useForm } from "react-hook-form";
 
 import { GameContext } from "../context/GameContext";
+import { AuthContext } from "../context/AuthContext";
 import { useMathsEngine } from "../hooks/useMathsEngine";
+import { useMascotas } from "../hooks/useMascotas";
 
 import "./Dashboard.css"
 import { Link, useNavigate } from "react-router-dom";
@@ -12,6 +14,7 @@ import { POKEDEX } from "/src/utils/pokedex.js"
 const Dashboard = () => {
     const { mascotaGlobal, xp, nivel, ganarExperiencia, puedeAdoptar } = useContext(GameContext);
     const { num1, num2, operador, nuevaOperacion, comprobarResultado } = useMathsEngine();
+    const { juegoCompletado } = useMascotas();
     const navigate = useNavigate()
 
     //el formulario
@@ -22,27 +25,58 @@ const Dashboard = () => {
     // usar state cuando el pokemon del usuario llegue al nivel máximo que aparezca una ventana emergente como que tiene disponible la opción de abrir otro huevo
     const [ mostrarModal, setMostrarModal] = useState(false);
     const [mensajeFeedback, setMensajeFeedback] = useState('');
+
+    //necesitamos el usuario para sobrescribir los datos de la sesión vieja que habiamos dejado
+    const { user, token, loginAuth } = useContext(AuthContext);
+
+    // Sincronización con el objetivo de que al continuar con la partida en otro dispositivo, se sincronice los datos pidiendolo al backend y este a mongo para recoger los datos actuales de la partida y no quedarse con la sesión vieja
+    useEffect(() => {
+        const sincronizarDatos = async () => {
+            try {
+                const response = await fetch(`https://backend-mathpets.onrender.com/api/v1/users/${user._id}`, {
+                    method: "GET",
+                    headers: {
+                        "Authorization": `Bearer ${token}` // Tu token de seguridad
+                    }
+                });
+
+                if (response.ok) {
+                    const datosFrescos = await response.json();
+                    // Sobreescribimos la sesión local con los datos traídos de Mongo
+                    // Al pasarle el mismo token, no cerramos sesión, solo refrescamos la info
+                    loginAuth(datosFrescos, token); 
+                }
+            } catch (error) {
+                console.log("Error sincronizando en segundo plano", error);
+            }
+        };
+
+        // Solo sincronizamos si hay un usuario logueado
+        if (user && token) {
+            sincronizarDatos();
+        }
+    }, []); //para que solo se ejecute la primera vez
     
     //como useEffec hace que se ejecute nuevasSumas cada vez que esta función cambia, necesitamos que la función nuevasSumas tenga un useCallback para memorizar la función y no se ejecute todo el rato.
     useEffect(() => {
         nuevaOperacion()
     }, [nuevaOperacion])
 
-useEffect(() => {
-    if (!mascotaGlobal) return;
+    useEffect(() => {
+        if (!mascotaGlobal) return;
 
-    const lineaEvolutiva = POKEDEX[mascotaGlobal];
-    const faseActual = lineaEvolutiva.slice().reverse().find(poke => nivel >= poke.nivelReq);
+        const lineaEvolutiva = POKEDEX[mascotaGlobal];
+        const faseActual = lineaEvolutiva.slice().reverse().find(poke => nivel >= poke.nivelReq);
 
-    fetch(`https://pokeapi.co/api/v2/pokemon/${faseActual.id}`)
-      .then(respuesta => respuesta.json())
-      .then(datosAPI => {
-        setDatosMascota({
-          nombre: faseActual.nombre,
-          imagen: datosAPI.sprites.other['official-artwork'].front_default
-        });
-      });
-  }, [nivel, mascotaGlobal]);
+        fetch(`https://pokeapi.co/api/v2/pokemon/${faseActual.id}`)
+            .then(respuesta => respuesta.json())
+            .then(datosAPI => {
+            setDatosMascota({
+                nombre: faseActual.nombre,
+                imagen: datosAPI.sprites.other['official-artwork'].front_default
+            });
+            });
+    }, [nivel, mascotaGlobal]);
 
     //para que aparezca la ventana emergente de aviso de abrir un nuevo huevo
     // Dentro de tu componente Dashboard
@@ -54,12 +88,13 @@ useEffect(() => {
     if (nivelAntiguo < nivelNuevo && nivelNuevo === nivelMax) {
         setMostrarModal(true);
     }
-    };
-    // --- COMO FUNCIONA EL JUEGO ---
+}
+
+// --- COMO FUNCIONA EL JUEGO ---
     const alEnviarRespuesta = (datosDelFormulario) => {
     // Comprobamos si acertó
     const esCorrecto = comprobarResultado(datosDelFormulario.respuesta);
-    console.log(datosDelFormulario.respuesta)
+  
 
     if (esCorrecto) {
       setMensajeFeedback('¡Correcto! 🎉 +25 XP');
@@ -94,10 +129,10 @@ useEffect(() => {
                 src={datosMascota?.imagen} 
                 alt={datosMascota?.nombre} 
                 />
-            </div>
+        </div>
 
         {/* zona de juego -- form */}
-            <div id="petInfo">
+        <div id="petInfo">
                 <h3>{datosMascota?.nombre}</h3>
                 <p>Nivel: {nivel} | XP: {xp}/100</p>
         {/* react-hook-form */}
@@ -128,13 +163,33 @@ useEffect(() => {
               <Link to ="/coleccion" >
                 <button id="goToColeccion">Coleccion</button>
             </Link>
-            {/* Solo si puedeAdoptar es true, enseñamos el botón */}
-            {puedeAdoptar && (
+            
+            {/* --- LÓGICA DEL BOTÓN DE ADOPTAR --- */}
+            {juegoCompletado ? (
+                <button disabled style={{ opacity: 0.6, cursor: 'not-allowed' }}>
+                    🏆 ¡Colección Completa! 🏆
+                </button>
+            ) : puedeAdoptar ? (
                 <Link to="/choose">
-                    <button className="btn-adoptar">Adoptar Nuevo Huevo 🥚</button>
+                    <button>Adoptar Nuevo Huevo 🥚</button>
                 </Link>
+            ) : (
+                <button disabled style={{ opacity: 0.6, cursor: 'not-allowed' }}>
+                    🔒 Evoluciona al máximo a tu mascota actual
+                </button>
             )}
         </div>
+
+        {/* --- mensaje de felicitacion al pasarse el juego --- */}
+        {juegoCompletado && (
+        <div className="juego-completado">
+                <h3>🌟 ¡Felicidades, Maestro Pet! 🌟</h3>
+                <p>
+                    Has desbloqueado todas las mascotas de esta versión. <br/>
+                    ¡Sigue practicando mates para subir sus estadísticas al máximo nivel!
+                </p>
+        </div>
+        )}
         {mostrarModal && (
         <div className="modal-overlay">
             <div className="modal-content">
@@ -148,8 +203,8 @@ useEffect(() => {
         </div>
         )}
         </div>
-        
-    );
+    )
 }
+
 
 export default Dashboard;

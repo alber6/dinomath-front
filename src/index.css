@@ -46,7 +46,8 @@ header {
   justify-content: space-between;
   align-items: center;
   font-weight: 700;
-  color: #4A5568; 
+  color: #4A5568;
+  margin-top: 10px;
 }
 
 /* LA TARJETA BLANCA FLOTANTE */

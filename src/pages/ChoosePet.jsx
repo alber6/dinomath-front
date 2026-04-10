@@ -15,6 +15,9 @@ const ChoosePet = () => {
 
         // conseguir el nombre de las mascotas que tiene el usuario y sino me das un array vacío, ponemos ? para que si no sale nada, aparezca undefined en vez de saltar un error
         const mascotasConseguidas = user?.pets?.map(mascota => mascota.nombre) || [];
+
+        //sacamos las mascotas que siguen disponibles para elegir porque cuando ya no quede ninguno para elegir, mandaremos un mensaje al usuario
+        const mascotasDisponibles = Object.keys(POKEDEX).filter((nombrePokemon) => !mascotasConseguidas.includes(nombrePokemon))
         
         const confirmarEleccion = () => {
             if (!mascotaSeleccionada) return; 
@@ -39,47 +42,41 @@ const ChoosePet = () => {
     }, [user, puedeAdoptar, navigate]);
 
 return (
-    <div className="choose">
-        <h2>¡Elige la mascota que quieras!</h2>
-        <div className="botones">
-            {/* Iniciamos el bucle para sacar los 3 primeros Pokémon pero antes filtrar para no coger los pokemons que ya tiene el usuario en su coleccion */}
-            {Object.keys(POKEDEX)
-                .filter((nombrePokemon) => !mascotasConseguidas.includes(nombrePokemon))
-                .slice(0, 3).map((nombrePokemon) => {
-                    // extraer la imagen y tipo directamente de tu POKEDEX
-                    const imagenHuevo = POKEDEX[nombrePokemon][0].egg;
-                    const tipoHuevo = POKEDEX[nombrePokemon][0].tipo;
+        <div className="choose">
+                    <h2>¡Elige la mascota que quieras!</h2>
+                    <div className="botones">
+                        {/* Como ya hemos filtrado arriba, aquí solo usamos el array y lo cortamos a 3 */}
+                        {mascotasDisponibles.slice(0, 3).map((nombrePokemon) => {
+                            const imagenHuevo = POKEDEX[nombrePokemon][0].egg;
+                            const tipoHuevo = POKEDEX[nombrePokemon][0].tipo;
 
-                    return (
-                        <div className="eggCard" key={nombrePokemon}>
-                            <button 
-                                className={`btn-juego ${mascotaSeleccionada === nombrePokemon ? 'seleccionado' : ''}`} 
-                                onClick={() => setMascotaSeleccionada(nombrePokemon)}
-                            >
-                                {tipoHuevo}
-                            </button>
-                    
-                            {/* Colocamos la imagen del huevo */}
-                            <img 
-                                src={imagenHuevo} 
-                                alt={`Huevo de ${tipoHuevo}`} 
-                            />
+                            return (
+                                <div className="eggCard" key={nombrePokemon}>
+                                    <button 
+                                        className={`btn-juego ${mascotaSeleccionada === nombrePokemon ? 'seleccionado' : ''}`} 
+                                        onClick={() => setMascotaSeleccionada(nombrePokemon)}
+                                    >
+                                        {tipoHuevo}
+                                    </button>
+                                    <img
+                                        src={imagenHuevo} 
+                                        alt={`Huevo de ${tipoHuevo}`} 
+                                    />
+                                </div>
+                            );
+                        })} 
+                    </div>
+
+                    {mascotaSeleccionada && (
+                        <div className="buttonConfirmado">
+                            <p>
+                                {`Has elegido el huevo de ${POKEDEX[mascotaSeleccionada][0].tipo}. ¿Estás seguro?`}
+                            </p>
+                            <button onClick={confirmarEleccion}>Adoptar y empezar</button>
                         </div>
-                    );
-                })} 
+                    )}
         </div>
-
-        {/* Zona de confirmación */}
-        {mascotaSeleccionada && (
-            <div className="buttonConfirmado">
-                <p>
-                    {/* Buscamos el tipo exacto en la POKEDEX usando la mascotaSeleccionada */}
-                    {`Has elegido el huevo de ${POKEDEX[mascotaSeleccionada][0].tipo}. ¿Estás seguro?`}
-                </p>
-                <button onClick={confirmarEleccion}>Adoptar y empezar</button>
-            </div>
-        )}
-    </div>
-)};
+    );
+};
 
 export default ChoosePet;

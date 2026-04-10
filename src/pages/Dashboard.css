@@ -71,6 +71,21 @@
     font-size: 0.5rem;
 }
 
+.juego-completado {
+  margin-top: 20px; 
+  padding: 15px; 
+  background-color: #fff8e1; 
+  border: 2px dashed #ffcc00;
+  border-radius: 10px; 
+  color: #b78c00;
+  text-align: center;
+  animation: aparecer 0.5s ease-in;
+}
+.juego-completado p {
+  margin: 5px 0 0 0;
+  font-size: 1rem;
+}
+
 /* Fondo y tarjeta */
 .modal-overlay {
   position: fixed;
@@ -121,4 +136,11 @@
       height: 35px;
       width: 80px;
     }
+    .juego-completado h3{
+      font-size: 0.8rem;
+    }
+    .juego-completado p {
+      font-size: 0.5rem;
+    }
 }
+

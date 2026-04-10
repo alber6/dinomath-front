@@ -2,6 +2,7 @@ import React, { useContext } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { AuthContext } from "../context/AuthContext"
 import { GameContext } from "../context/GameContext.jsx";
+import { useMascotas } from "../hooks/useMascotas";
 import { POKEDEX } from "../utils/pokedex.js"
 import "./Coleccion.css"
 
@@ -11,6 +12,7 @@ const Coleccion = () => {
     const { user } = useContext(AuthContext);
     const { equiparMascota, puedeAdoptar } = useContext(GameContext)
     const navigate = useNavigate()
+    const { juegoCompletado } = useMascotas()
 
     //proteccion mientras se carga la mochila de pets
     if (!user) return <p>Cargando Pokedex...</p>
@@ -96,14 +98,20 @@ const Coleccion = () => {
                 <Link to="/dashboard">
                 <button>Volver al Centro</button>
                 </Link>
-                {/* Solo si puedeAdoptar es true, enseñamos el botón */}
-                {puedeAdoptar && (
-                <Link to="/choose">
-                    <button>Adoptar Nuevo Huevo 🥚</button>
-                </Link>
-            )}
-          
-            
+                {/* si el juego está completado o si puede adoptar o un consejo de seguir jugando */}
+                {juegoCompletado ? (
+                    <button disabled style={{ opacity: 0.6, cursor: 'not-allowed' }}>
+                        🏆 ¡Colección Completa! 🏆
+                    </button>
+                ) : puedeAdoptar ? (
+                    <Link to="/choose">
+                        <button>Adoptar Nuevo Huevo 🥚</button>
+                    </Link>
+                ) : (
+                    <button disabled style={{ opacity: 0.6, cursor: 'not-allowed' }}>
+                        🔒 Evoluciona al máximo a tu mascota actual
+                    </button>
+                )}
         </div>
     );
 };
