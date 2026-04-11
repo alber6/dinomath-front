@@ -157,8 +157,8 @@ const Dashboard = () => {
             {/* Mensajes visuales */}
             {errors.respuesta && <p>¡Debes escribir un número!</p>}
             {mensajeFeedback && <p className="feedback-msj">{mensajeFeedback}</p>}
-            
-            {/* Botonera de Navegación */}
+        <div className="nav-buttons">
+             {/* Botonera de Navegación */}
             <div className="botones-navegacion">
                 <Link to="/">
                     <button id="goToHome">Ir a inicio</button>
@@ -193,6 +193,8 @@ const Dashboard = () => {
                     </p>
                 </div>
             )}
+        </div>    
+           
 
             {/* Modal de evolución */}
             {mostrarModal && (

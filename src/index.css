@@ -113,33 +113,42 @@ footer {
   font-weight: 700;
 }
 
-/* --- BOTONES MODERNOS --- */
+
+
+/* --- BOTONES MODERNOS (MÁS DISCRETOS) --- */
 .home button, .choose button, .dashboard button, .coleccion button {
   background-color: #FFCB05;
   color: #333333;
   border: none; 
-  border-radius: 30px; 
-  padding: 14px 28px;
-  font-size: 1.1rem;
-  font-weight: 900;
+  border-radius: 20px; 
+  padding: 10px 20px;  
+  font-size: 0.9rem;
+  font-weight: 800;
   text-transform: uppercase;
-  letter-spacing: 1px;
-  transition: all 0.1s ease;
-  box-shadow: 0 6px 0px #D4A600; 
-  margin: 10px; 
-  cursor: pointer;
+  transition: all 0.2s ease;
+  box-shadow: 0 4px 0px #D4A600; /* Sombra más corta */
+  margin: 5px; 
+}
+
+/* El botón de "Evoluciona al máximo" o botones secundarios */
+.dashboard button.secundario {
+    background-color: #e2e8f0;
+    box-shadow: 0 4px 0px #cbd5e0;
+    color: #4a5568;
+    opacity: 0.8;
 }
 
 .home button:hover, .choose button:hover, .dashboard button:hover, .coleccion button:hover {
   background-color: #FFD633; 
   transform: translateY(-2px); 
-  box-shadow: 0 8px 0px #D4A600; 
+  box-shadow: 0 6px 0px #D4A600; 
 }
 
 .home button:active, .choose button:active, .dashboard button:active, .coleccion button:active {
-  transform: translateY(6px); 
+  transform: translateY(4px); 
   box-shadow: 0 0px 0px #D4A600; 
 }
+
 
 /* --- RESPONSIVE --- */
 /* Tablets y pantallas medianas */
@@ -173,9 +182,10 @@ footer {
   }
 
   .home button, .choose button, .dashboard button, .coleccion button {
-    padding: 10px 15px;
-    font-size: 0.8rem;
-    margin: 5px;
+    padding: 8px 12px;
+    font-size: 0.75rem;
+    margin: 3px;
+    box-shadow: 0 3px 0px #D4A600;
   }
   
   .dashboard > h2, #petInfo > h3 {

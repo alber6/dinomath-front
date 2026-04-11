@@ -1,50 +1,70 @@
-
 .dashboard {
   margin: auto;
   width: 100%;
+  min-height: 100%; /* Quitamos vh fijo para que se adapte al contenido */
   display: flex;
   flex-direction: column;
-  align-items: center; /* Centra todo el bloque */
+  justify-content: space-between; 
+  align-items: center;
   gap: 20px;
 }
 
 #container-dashboard {
   width: 100%;
-  max-width: 1000px; /* Evita que se estire */
+  max-width: 900px;
+  flex: 1; 
   display: flex;
-  flex-direction: row; /* En escritorio van uno al lado del otro */
+  flex-direction: row; 
   align-items: center;
-  justify-content: center;
-  gap: 40px; 
+  justify-content: space-around; /* Reparte mejor el espacio */
+  gap: 10px;
 }
 
+#petImg {
+  flex: 2; /* Ocupa el doble que la info */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 10px;
+}
 
-#petImg, #petInfo {
-  flex: 1; /* Ocupa todo el espacio libre que quede disponible */
-  /* min-width: 300px es LA CLAVE para que cuando la pantalla se haga pequeña, 
-     salten a estar uno debajo del otro en lugar de aplastarse */
-  min-width: 300px; 
+#petInfo {
+  flex: 1; 
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: center;
-  text-align: center;
+  gap: 10px;
+  min-width: 300px;
 }
 
 #petImg > img {
   width: 100%;
-  max-width: 380px;
+  max-width: 550px; /* Tamaño ideal para que se vea imponente */
   height: auto;
-  object-fit: contain;
-  transition: transform 0.4s ease-in-out;
+  filter: drop-shadow(0 15px 25px rgba(0,0,0,0.12));
+  transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
 }
 
 #petImg > img:hover {
-  transform: scale(1.1) translateY(-5px); 
+  transform: scale(1.05) translateY(-10px); 
 }
 
-#petInfo {
+#petInfo h3 {
+  font-size: 1.5rem; /* Nombre de la mascota bien grande */
+  color: #2D3748;
+}
+
+/* --- BOTONES DE NAVEGACIÓN (ABAJO) --- */
+/* Te recomiendo envolver tus botones de abajo en un div llamado .nav-buttons */
+.nav-buttons {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
   gap: 15px;
+  padding-bottom: 20px;
+  border-top: 2px solid #898989; 
+  padding-top: 70px;
 }
 
 #form {
@@ -52,22 +72,23 @@
   flex-direction: column;
   align-items: center;
   gap: 20px;
-  width: 100%;
 }
 
 #operation {
   display: flex;
-  gap: 10px;
-  justify-content: center;
-  align-items: center;
-  font-size: 1.5rem;
-  font-weight: bold;
-  color: #2D3748;
+  font-size: 1.1rem;
+  background: #f8fafc;
+  width: 300px;
+  border-radius: 25px;
+  border: 2px solid #e2e8f0;
+}
+#operation p {
+  margin: 6px;
 }
 
 #operation input {
   width: 120px;
-  height: 55px;
+  height: 40px;
   background-color: #F7FAFC; 
   color: #2D3748; 
   border: 3px solid #CBD5E0;
@@ -119,13 +140,13 @@
    ========================================= */
 @keyframes evolucionRetro {
   0% { filter: brightness(1); transform: scale(1); }
-  20% { filter: brightness(20) drop-shadow(0 0 50px rgb(255, 255, 255)); transform: scale(1.1); }
-  80% { filter: brightness(20) drop-shadow(0 0 50px rgb(255, 255, 255)); transform: scale(1.1); }
+  20% { filter: brightness(20) drop-shadow(0 0 50px rgb(0, 0, 0)); transform: scale(1.1); }
+  80% { filter: brightness(20) drop-shadow(0 0 50px rgb(0, 0, 0)); transform: scale(1.1); }
   100% { filter: brightness(1); transform: scale(1); }
 }
 
 .evolucion-animacion {
-  animation: evolucionRetro 2s ease-in-out;
+  animation: evolucionRetro 2s ease-in;
 }
 
 /* MODAL DE MÁXIMO NIVEL */
@@ -224,7 +245,7 @@
   }
 
   #petImg > img {
-    max-width: 220px; 
+    max-width: 280px; 
   }
 
   #petInfo h3 {
@@ -232,7 +253,8 @@
   }
 
   #operation {
-    font-size: 1.2rem;
+    font-size: 1.4rem;
+    padding: 10px 15px;
   }
 
   #operation input {
