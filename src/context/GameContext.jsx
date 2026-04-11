@@ -50,7 +50,7 @@ const GameProvider = ({ children }) => {
         try {
             // Si no nos pasan pets, usamos las que ya tiene el usuario
             const listaPets = petsActualizadas || user.pets;
-            const response = await fetch(`https://backend-mathpets.onrender.com/api/v1/users/${user._id}`, {
+            const response = await fetch(`${import.meta.env.VITE_API_URL}/users/${user._id}`, {
                 method: "PUT",
                 headers: {
                     "Content-Type": "application/json",

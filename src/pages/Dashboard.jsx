@@ -33,7 +33,7 @@ const Dashboard = () => {
             if (!user?._id || !token) return;
 
             try {
-                const response = await fetch(`https://backend-mathpets.onrender.com/api/v1/users/${user._id}`, {
+                const response = await fetch(`${import.meta.env.VITE_API_URL}/users/${user._id}`, {
                     method: "GET",
                     headers: {
                         "Authorization": `Bearer ${token}` 

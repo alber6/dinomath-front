@@ -2,6 +2,9 @@
 
 DinoMath es una aplicación web interactiva y gamificada diseñada para que los niños de primaria practiquen matemáticas mientras crían, entrenan y evolucionan a su propia familia de dinosaurios virtuales.
 
+![Captura de pantalla de DinoMath](./public/screenshot-dashboard.png)
+*Interfaz principal del Centro de Entrenamiento: El dinosaurio evoluciona mientras resuelves retos matemáticos.*
+
 ## ✨ Características Principales
 
 * **🥚 Adopción de Dinosaurios:** Los usuarios pueden elegir entre 5 familias prehistóricas basadas en elementos: Rex (Fuego), Triceratops (Tierra), Braquiosaurio (Agua), Pterodáctilo (Aire) y Anquilosaurio (Planta). ¡Todos empiezan como un misterioso huevo!
@@ -22,18 +25,26 @@ DinoMath es una aplicación web interactiva y gamificada diseñada para que los 
 * **React Hook Form:** Para la gestión eficiente y validación del formulario de respuestas matemáticas.
 * **CSS3 Avanzado:** Diseño responsivo integral (CSS Grid + Flexbox), animaciones `@keyframes`, y uso avanzado de filtros visuales (`brightness`, `drop-shadow`, `object-fit`) para adaptar las imágenes y crear las siluetas secretas de la Dinodex.
 
-### Backend (Servidor y Base de Datos)
-* **Node.js & Express:** API RESTful para gestionar la lógica de usuarios y el autoguardado de partidas.
-* **MongoDB & Mongoose:** Base de datos NoSQL para almacenar de forma segura las credenciales y el inventario de dinosaurios de cada jugador.
-* **JWT (JSON Web Tokens):** Para la autenticación y protección de las rutas privadas del jugador.
-* **Despliegue:** Frontend alojado en Vercel y Backend en Render.
 
 ## 🚀 Cómo ejecutar el proyecto en local
-
 Sigue estos pasos para probar la interfaz de DinoMath en tu propio ordenador:
 
+### 1. Clonar y preparar carpeta
 1. Clona este repositorio o descomprime el archivo `.zip`.
 2. Abre la terminal en la carpeta raíz del proyecto.
-3. Instala las dependencias necesarias ejecutando:
-   ```bash
-   npm install
+
+
+### 3. Instalación
+Instala las dependencias necesarias ejecutando:
+````bash
+npm install
+````
+
+Arrancar el proyecto en modo desarrollo
+````bash
+npm run dev
+````
+
+## URL de la API del servidor (Backend en Render)
+Ejemplo: https://dinomath-backend.onrender.com/api/v1
+VITE_API_URL=tu_url_de_render_aqui
