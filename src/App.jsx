@@ -9,6 +9,11 @@ function App() {
         <Header />
         <main>
           <Outlet />
+          {/* 
+            Aquí es donde React inyectará
+            las diferentes pantallas (Home, Login, Dashboard...)
+            dependiendo de la URL en la que estemos, sin recargar la página.
+          */}
         </main>
         <Footer />
       </div>

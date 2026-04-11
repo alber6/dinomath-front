@@ -4,149 +4,264 @@
   width: 100%;
   display: flex;
   flex-direction: column;
+  align-items: center; /* Centra todo el bloque */
+  gap: 20px;
 }
 
-#container-dashboard{
+#container-dashboard {
   width: 100%;
+  max-width: 1000px; /* Evita que se estire */
   display: flex;
-  flex-wrap: wrap;
-  gap: 50px;
+  flex-direction: row; /* En escritorio van uno al lado del otro */
   align-items: center;
-  justify-content: space-between;
+  justify-content: center;
+  gap: 40px; 
+}
+
+
+#petImg, #petInfo {
+  flex: 1; /* Ocupa todo el espacio libre que quede disponible */
+  /* min-width: 300px es LA CLAVE para que cuando la pantalla se haga pequeña, 
+     salten a estar uno debajo del otro en lugar de aplastarse */
+  min-width: 300px; 
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+}
+
+#petImg > img {
+  width: 100%;
+  max-width: 380px;
+  height: auto;
+  object-fit: contain;
+  transition: transform 0.4s ease-in-out;
+}
+
+#petImg > img:hover {
+  transform: scale(1.1) translateY(-5px); 
 }
 
 #petInfo {
-    display: flex;
-    flex-direction: column;
-    gap: 2px;
+  gap: 15px;
 }
 
-#petImg, #petInfo {
-  flex: 1; /* Ambas cajas ocuparán el mismo espacio (50/50) */
-  text-align: center;
-}
-#petImg > img{
-  width: 800px;
-  transition: transform 0.4s ease-in-out;
-}
-#petImg > img:hover{
-  transform: scale(1.15) translateY(-8px);
-}
-#form{
-    display: flex;
-    flex-direction: column;
-    gap: 20px;
+#form {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 20px;
+  width: 100%;
 }
 
-#operation{
-    display: flex;
-    gap: 5px;
-    justify-content: center;
-    align-content: end;
-    align-items: end;
+#operation {
+  display: flex;
+  gap: 10px;
+  justify-content: center;
+  align-items: center;
+  font-size: 1.5rem;
+  font-weight: bold;
+  color: #2D3748;
 }
 
 #operation input {
-    width: 100px;
-    height: 50px;
-    background-color: #000;
-    color: #ffffff; 
-    border: 2px solid #555;
-    border-radius: 15px;
-    transition: all 0.3s ease;
+  width: 120px;
+  height: 55px;
+  background-color: #F7FAFC; 
+  color: #2D3748; 
+  border: 3px solid #CBD5E0;
+  border-radius: 12px;
+  font-size: 1.2rem;
+  font-weight: bold;
+  text-align: center; 
+  transition: all 0.3s ease;
 }
+
 #operation input:focus {
-  border-color: #cdcdcd;
-  box-shadow: 0 0 20px #cdcdcd, inset 0 0 10px #cdcdcd;
+  outline: none;
+  border-color: #3B4CCA;
+  box-shadow: 0 0 0 4px rgba(59, 76, 202, 0.15);
   transform: scale(1.05);
 }
 
-@keyframes evolucionRetro {
-  0% { filter: brightness(1); transform: scale(1); }
-  20% { filter: brightness(20) drop-shadow(0 0 50px white); transform: scale(1.1); }
-  80% { filter: brightness(20) drop-shadow(0 0 50px white); transform: scale(1.1); }
-  100% { filter: brightness(1); transform: scale(1); }
-}
-/* Solo aplicamos esto directamente a la etiqueta <img> */
-.evolucion-animacion {
-  animation: evolucionRetro 2s ease-in-out;
+.feedback-msj {
+  font-weight: bold;
+  font-size: 1.2rem;
+  color: #38A169; 
+  animation: saltito 0.3s ease;
 }
 
-#goToHome {
-    padding: 3px;
-    font-size: 0.5rem;
+@keyframes saltito {
+  0% { transform: translateY(10px); opacity: 0; }
+  100% { transform: translateY(0); opacity: 1; }
 }
 
 .juego-completado {
   margin-top: 20px; 
-  padding: 15px; 
+  padding: 15px 30px; 
   background-color: #fff8e1; 
   border: 2px dashed #ffcc00;
   border-radius: 10px; 
   color: #b78c00;
   text-align: center;
   animation: aparecer 0.5s ease-in;
+  max-width: 600px;
 }
+
 .juego-completado p {
-  margin: 5px 0 0 0;
+  margin: 10px 0 0 0;
   font-size: 1rem;
 }
 
-/* Fondo y tarjeta */
+/* =========================================
+   ANIMACIONES DE EVOLUCIÓN
+   ========================================= */
+@keyframes evolucionRetro {
+  0% { filter: brightness(1); transform: scale(1); }
+  20% { filter: brightness(20) drop-shadow(0 0 50px rgb(255, 255, 255)); transform: scale(1.1); }
+  80% { filter: brightness(20) drop-shadow(0 0 50px rgb(255, 255, 255)); transform: scale(1.1); }
+  100% { filter: brightness(1); transform: scale(1); }
+}
+
+.evolucion-animacion {
+  animation: evolucionRetro 2s ease-in-out;
+}
+
+/* MODAL DE MÁXIMO NIVEL */
 .modal-overlay {
   position: fixed;
   inset: 0;
   background: rgba(0, 0, 0, 0.7);
-  box-shadow: #ffffff;
+  backdrop-filter: blur(4px); 
   display: flex;
   justify-content: center;
   align-items: center;
   z-index: 1000;
+  padding: 20px;
 }
 
 .modal-content {
   background: white;
-  padding: 30px;
-  border-radius: 15px;
+  padding: 40px;
+  border-radius: 20px;
   text-align: center;
-  max-width: 500px;
+  max-width: 450px;
+  width: 100%;
   border: 4px solid #fbd000;
+  box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
 }
 
 .modal-content p, .modal-content h2 {
-  color: #000;
+  color: #2D3748;
+  margin-bottom: 10px;
 }
 
-/* Contenedor y estilo base de botones */
 .modal-buttons {
   display: flex;
   flex-direction: column;
-  gap: 10px;
-  margin-top: 20px;
+  gap: 15px;
+  margin-top: 25px;
 }
 
 .modal-buttons button {
-  padding: 12px;
-  border-radius: 8px;
+  padding: 14px;
+  border-radius: 12px;
   border: none;
-  font-weight: bold;
-  transition: transform 0.1s;
+  font-size: 1rem;
+  font-weight: 900;
+  cursor: pointer;
+  background-color: #EDF2F7;
+  color: #4A5568;
+  transition: all 0.2s;
+}
+
+/* Destacamos el botón principal del modal */
+.modal-buttons button:last-child {
+  background-color: #FFCB05;
+  color: #333333;
+}
+
+.modal-buttons button:hover {
+  transform: translateY(-2px);
+  filter: brightness(0.95);
 }
 
 .modal-buttons button:active {
-  transform: scale(0.95); /* Efecto de pulsado */
+  transform: scale(0.97); 
 }
 
+
+/*DISEÑO RESPONSIVE (Móviles y Tablets) */
+/* Tablets y móviles en apaisado */
+@media (max-width: 768px) {
+  #container-dashboard {
+    flex-direction: column; 
+    gap: 20px;
+  }
+  
+  #petImg > img {
+    max-width: 280px; 
+  }
+  
+  #operation {
+    font-size: 1.3rem;
+  }
+  
+  .juego-completado {
+    padding: 15px;
+  }
+}
+
+/* Móviles estándar  */
 @media (max-width: 560px) {
-    #operation > input {
-      height: 35px;
-      width: 80px;
-    }
-    .juego-completado h3{
-      font-size: 0.8rem;
-    }
-    .juego-completado p {
-      font-size: 0.5rem;
-    }
-}
+  .dashboard {
+    gap: 10px;
+  }
 
+  .dashboard h2 {
+    font-size: 1.2rem;
+  }
+
+  #petImg > img {
+    max-width: 220px; 
+  }
+
+  #petInfo h3 {
+    font-size: 1.1rem;
+  }
+
+  #operation {
+    font-size: 1.2rem;
+  }
+
+  #operation input {
+    height: 45px;
+    width: 90px;
+    font-size: 1.1rem;
+  }
+
+  .modal-content {
+    padding: 25px 15px;
+  }
+  
+  .modal-buttons button {
+    padding: 10px;
+    font-size: 0.9rem;
+  }
+
+  .juego-completado h3 {
+    font-size: 0.9rem;
+  }
+
+  .juego-completado p {
+    font-size: 0.75rem;
+  }
+  
+  .botones-navegacion {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    align-items: center;
+  }
+}

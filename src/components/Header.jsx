@@ -34,7 +34,7 @@ if (mascotaGlobal) {
 }
     return (
         <header>
-            <h1>MathsPets 🐾</h1>
+            <h1>DinoMath</h1>
             
             {/* Si user existe, mostramos los stats. Si no, no mostramos nada. */}
             {user && (

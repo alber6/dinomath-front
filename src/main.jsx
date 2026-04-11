@@ -15,10 +15,11 @@ import Register from './pages/Register.jsx'
 
 createRoot(document.getElementById('root')).render(
   <StrictMode>
+     {/* habilita el sistema de navegación por las urls */}
     <BrowserRouter basename='/'>
-      {/* AuthContext envuelve todo para saber quién estña jugando */}
+      {/* AuthContext envuelve todo para saber si hay un usuario y quién es */}
       <AuthContext>
-        {/* gameContext maneja la partida del usuario */}
+        {/* gameContext maneja la partida del usuario, envuelve todas las rutas para que cualquier pantalla pueda acceder a los datos del usuario */}
         <GameContext>
         <Routes>
         <Route path='/' element={<App />}>
@@ -35,3 +36,7 @@ createRoot(document.getElementById('root')).render(
     </BrowserRouter>
   </StrictMode>
 )
+// El usuario navega.
+//Auth verifica si tiene llave para entrar.
+//Game carga sus datos si la llave es correcta
+//El <Outlet /> pinta la pantalla.

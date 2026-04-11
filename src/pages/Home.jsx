@@ -19,7 +19,7 @@ const Home = () => {
     
     return (
         <div className="home">
-            <h1>Bienvenido a MathPets</h1>
+            <h1>Bienvenido a DinoMath</h1>
             <p>Interacciona y enseña a tu nueva mascota las matematicas para que aprenda un montón</p>
             {/* Si existe user*/}
             {user ? (
@@ -39,7 +39,6 @@ const Home = () => {
                         </div>
                     ) : (
                         <Link to ="choose" > 
-                        {/* si no existe user */}
                             <button>Empezar aventura</button>
                         </Link>
                     )}

@@ -1,5 +1,4 @@
 import { useContext } from 'react';
-// IMPORTANTE: Asegúrate de que las rutas a tu AuthContext y tu DINODEX sean correctas
 import { AuthContext } from '../context/AuthContext'; 
 import { DINODEX } from '../utils/dinodex.js'; 
 

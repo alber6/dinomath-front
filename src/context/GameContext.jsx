@@ -9,6 +9,7 @@ const GameProvider = ({ children }) => {
     const navigate = useNavigate();
     const { user, token, setUser } = useContext(AuthContext);
 
+    // Usamos localStorage por si se recarga la página a mitad de una partida
     const [mascotaGlobal, setMascotaGlobal] = useState(() => {
         return localStorage.getItem('mascotaElegida') || null;
     });
@@ -22,7 +23,8 @@ const GameProvider = ({ children }) => {
         const nivelGuardado = localStorage.getItem('mascotaNivel');
         return nivelGuardado ? parseInt(nivelGuardado) : 1;
     });
-
+    // SINCRONIZACIÓN LOCAL Si detectamos que el usuario acaba de iniciar sesión (el user cambió),
+    // leemos su 'mascotaActiva' de la base de datos y la ponemos en la pantalla.
     useEffect(() => {
         if (user && user.mascotaActiva && user.mascotaActiva.nombre) {
             setMascotaGlobal(user.mascotaActiva.nombre);
@@ -31,22 +33,23 @@ const GameProvider = ({ children }) => {
         }
     }, [user]);
 
+    // Cada vez que ganemos XP o subamos de nivel, actualizamos la "memoria a corto plazo" (localStorage)
     useEffect(() => {
         if (mascotaGlobal) {
             localStorage.setItem('mascotaElegida', mascotaGlobal);
         }
+        //como tienen valores por defecto si que existen entonces no hay condiciones sino que actualizamos directamente
         localStorage.setItem('mascotaXp', xp);
         localStorage.setItem('mascotaNivel', nivel);
     }, [mascotaGlobal, xp, nivel]);
 
-    // --- MEJORA: guardarEnBackend ahora acepta el array de pets actualizado ---
+    // CONEXIÓN CON LA NUBE - Esta función coge la partida actual y la manda a Render para guardarla en MongoDB.
     const guardarEnBackend = async (nombre, nuevaXp, nuevoNivel, petsActualizadas = null) => {
         if (!user || !token) return;
 
         try {
             // Si no nos pasan pets, usamos las que ya tiene el usuario
             const listaPets = petsActualizadas || user.pets;
-
             const response = await fetch(`https://backend-mathpets.onrender.com/api/v1/users/${user._id}`, {
                 method: "PUT",
                 headers: {
@@ -73,6 +76,7 @@ const GameProvider = ({ children }) => {
         }
     };
 
+    //cuando se acierta una operación
     const ganarExperiencia = (puntosGanados) => {
         const nuevaXp = xp + puntosGanados;
         let nuevoNivel = nivel;
@@ -82,17 +86,17 @@ const GameProvider = ({ children }) => {
             nuevoNivel = nivel + 1;
             xpFinal = nuevaXp - 100;
         }
-
+        // Actualizamos la pantalla (estado local)
         setNivel(nuevoNivel);
         setXp(xpFinal);
 
-        // ACTUALIZACIÓN CRÍTICA: También actualizamos el nivel en la colección (pets)
+        // Buscamos a esta mascota en la Colección y le actualizamos su nivel personal.
         const petsActualizadas = user.pets.map(p => 
             p.nombre === mascotaGlobal 
             ? { ...p, nivel: nuevoNivel, xp: xpFinal } 
             : p
         );
-
+        // Mandamos los datos a la nube.
         guardarEnBackend(mascotaGlobal, xpFinal, nuevoNivel, petsActualizadas);
     };
 
@@ -114,13 +118,13 @@ const GameProvider = ({ children }) => {
         guardarEnBackend(null, 0, 1, []);
         navigate('/choose');
     };
-
+    // cuando eligen un huevo en choosepet
     const elegirMascota = (tipoMascota) => {
         setMascotaGlobal(tipoMascota);
         setXp(0);
         setNivel(1);
 
-        // ACTUALIZACIÓN CRÍTICA: Añadimos la nueva mascota al array de la colección
+        // Añadimos la nueva mascota al array de la colección
         const nuevaMascota = { nombre: tipoMascota, nivel: 1, xp: 0 };
         
         // Evitamos duplicados por si acaso
@@ -129,7 +133,7 @@ const GameProvider = ({ children }) => {
 
         guardarEnBackend(tipoMascota, 0, 1, nuevasPets);
     };
-
+    // cuando se equipa otra mascota en colección para jugar con ella
     const equiparMascota = (mascotaColeccion) => {
         setMascotaGlobal(mascotaColeccion.nombre);
         setXp(mascotaColeccion.xp);
@@ -137,22 +141,22 @@ const GameProvider = ({ children }) => {
         guardarEnBackend(mascotaColeccion.nombre, mascotaColeccion.xp, mascotaColeccion.nivel, user.pets);
     };
 
-    // --- LÓGICA DE ADOPCIÓN (Ahora debería funcionar al actualizarse user.pets) ---
-    let familiasCompletadas = 0;
+    // En lugar de tener un estado que diga 'puedeAdoptar = false' e intentar cambiarlo...
+    // ...lo calculamos "al vuelo" leyendo la Dinodex. Así es imposible que se desincronice.
+    let familiasEnNivelProgreso = 0;
     if (user && user.pets) {
         user.pets.forEach(pet => {
-            const linea = DINODEX[pet.nombre]; 
-            if (linea) {
-                const nivelMaximoDeEstaFamilia = linea[linea.length - 1].nivelReq;
-                if (pet.nivel >= nivelMaximoDeEstaFamilia) {
-                    familiasCompletadas++;
-                }
+            // Buscamos si la mascota ha llegado al nivel 10 para desbloquear la siguiente adopción
+            if (pet.nivel >= 10) {
+                familiasEnNivelProgreso++;
             }
         });
     }
-
-    const limiteMascotas = 1 + familiasCompletadas;
+    // un 1 porque todo usuario al inicio tiene una mascota, si llega a nivel 10 se le suma 1, entonces ya tiene 2 mascotas
+    const limiteMascotas = 1 + familiasEnNivelProgreso;
+    // ver cuantas mascotas tiene el usuario sino dame 0
     const mascotasActuales = user?.pets?.length || 0;
+    
     const puedeAdoptar = mascotasActuales < limiteMascotas;
 
     return (

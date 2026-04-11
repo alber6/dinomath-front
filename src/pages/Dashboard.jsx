@@ -26,7 +26,7 @@ const Dashboard = () => {
     // Contexto de usuario
     const { user, token, loginAuth } = useContext(AuthContext);
 
-    // --- EFECTO 1: Sincronización en segundo plano ---
+    // --- Sincronización en segundo plano de los dtos por si quieres seguir la partida en tu navegador que ya te ha reconocido o si vas a otro dispositvo que al entrar se haya sincronizdo los últimos datos de la partida ---
     useEffect(() => {
         const sincronizarDatos = async () => {
             // Si por algún motivo no hay ID o token, cortamos la función aquí
@@ -50,9 +50,9 @@ const Dashboard = () => {
         };
 
         sincronizarDatos();
-    }, [user?._id, token, loginAuth]); // <-- Dependencias añadidas para evitar warnings de ESLint
+    }, [user?._id, token, loginAuth]);
 
-    // --- EFECTO 2: Generar primera operación ---
+    // --- Generar primera operación ---
     useEffect(() => {
         nuevaOperacion();
     }, [nuevaOperacion]);
@@ -62,9 +62,12 @@ const Dashboard = () => {
         // Seguro de vida por si aún no ha cargado la mascota global
         if (!mascotaGlobal || !DINODEX[mascotaGlobal]) return;
 
+        // linea es un array de las 4 fases de por ejemplo rex
         const linea = DINODEX[mascotaGlobal];
+        //esto lo que hace es sacar el nivel máximo de la última evolucion del rex
         const nivelMax = linea[linea.length - 1].nivelReq;
 
+        //doble verificacion para que si un dino es nivel 20 y al volver a entrar en la app sigue siendo nivel 20 no vuelva a aparecer el modal
         if (nivelAntiguo < nivelNuevo && nivelNuevo === nivelMax) {
             setMostrarModal(true);
         }
@@ -96,22 +99,28 @@ const Dashboard = () => {
         setTimeout(() => setMensajeFeedback(''), 2000);
     };
 
-    // --- LÓGICA DE ESTADO DERIVADO ---
+    // --- LÓGICA DE ESTADO DERIVADO decide qué dinosaurio se ve en pantalla en cada segundo.---
+    // Preparamos una variable vacía que llenaremos con la fase correcta
     let datosMascota = null;
-
+    // Primero comprobamos que hay una mascota elegida para no romper el código
     if (mascotaGlobal && DINODEX[mascotaGlobal]) {
-        const lineaEvolutiva = DINODEX[mascotaGlobal];
-        const faseActual = lineaEvolutiva.slice().reverse().find(dino => nivel >= dino.nivelReq);
-        
-        if (faseActual) {
-            datosMascota = {
-                nombre: faseActual.nombre,
-                imagen: faseActual.imagen
-            };
-        }
-    }
+    // Traemos toda la "familia" de este dinosaurio (Huevo, Bebé, Joven, Adulto)
+    const lineaEvolutiva = DINODEX[mascotaGlobal];
 
-    // --- RENDERIZADO VISUAL ---
+    // Copiamos la lista y le damos la vuelta para mirar de "mayor a menor".
+    // Buscamos la primera fase que el nivel del usuario ya haya superado.
+    const faseActual = lineaEvolutiva.slice().reverse().find(dino => nivel >= dino.nivelReq);
+    
+    // Si encontramos una fase que encaje con nuestro nivel...
+    if (faseActual) {
+        // ...extraemos el nombre y la foto para que el componente los dibuje.
+        datosMascota = {
+            nombre: faseActual.nombre,
+            imagen: faseActual.imagen
+        };
+    }
+}
+
     return (
         <div className="dashboard">
             <h2>Centro de Entrenamiento</h2>
@@ -119,7 +128,7 @@ const Dashboard = () => {
             <div id="container-dashboard">
                 <div id="petImg">
                     <img 
-                        className={nivel === 2 || nivel === 3 ? "evolucion-animacion" : ""}
+                        className={nivel === 1 || nivel === 2 || nivel === 3 ? "evolucion-animacion" : ""}
                         key={datosMascota?.nombre}
                         src={datosMascota?.imagen} 
                         alt={datosMascota?.nombre} 
@@ -177,20 +186,20 @@ const Dashboard = () => {
             {/* Mensaje de felicitación final */}
             {juegoCompletado && (
                 <div className="juego-completado">
-                    <h3>🌟 ¡Felicidades, Maestro Pet! 🌟</h3>
+                    <h3>🌟 ¡Felicidades, Maestro Dino! 🌟</h3>
                     <p>
-                        Has desbloqueado todas las mascotas de esta versión. <br/>
+                        Has desbloqueado todas los dinosaurios de esta versión. <br/>
                         ¡Sigue practicando mates para subir sus estadísticas al máximo nivel!
                     </p>
                 </div>
             )}
 
-            {/* Modal de evolución máxima */}
+            {/* Modal de evolución */}
             {mostrarModal && (
                 <div className="modal-overlay">
                     <div className="modal-content">
                         <h2>¡Felicidades!</h2>
-                        <p>Tu mascota ha alcanzado su máximo potencial.</p>
+                        <p>Tu dinosaurio ha evolucionado.</p>
                         <div className="modal-buttons">
                             <button onClick={() => setMostrarModal(false)}>Seguir entrenando</button>
                             <button onClick={() => {
