@@ -13,7 +13,7 @@ export const DINODEX = {
     ],
     braquiosaurio: [
         { nivelReq: 1, id: 9, nombre: 'Huevo de Braquiosaurio', tipo: 'Agua', egg: '/BraquiEgg.png', imagen: '/BraquiEgg.png' },
-        { nivelReq: 2, id: 10, nombre: 'Braqui Bebé', imagen: '/BraquiBaby.png' },
+        { nivelReq: 5, id: 10, nombre: 'Braqui Bebé', imagen: '/BraquiBaby.png' },
         { nivelReq: 10, id: 11, nombre: 'Braqui Joven', imagen: '/BraquiYoung.png' },
         { nivelReq: 20, id: 12, nombre: 'Braqui Adulto', imagen: '/BraquiAdult.png' }
     ],
