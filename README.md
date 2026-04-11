@@ -2,7 +2,7 @@
 
 DinoMath es una aplicación web interactiva y gamificada diseñada para que los niños de primaria practiquen matemáticas mientras crían, entrenan y evolucionan a su propia familia de dinosaurios virtuales.
 
-![Captura de pantalla de DinoMath](./public/screenshot-dashboard.png)
+![Captura de pantalla de DinoMath](./public/fotoReadme.png)
 *Interfaz principal del Centro de Entrenamiento: El dinosaurio evoluciona mientras resuelves retos matemáticos.*
 
 ## ✨ Características Principales
