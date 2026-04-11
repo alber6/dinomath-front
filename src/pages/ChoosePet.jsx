@@ -2,79 +2,85 @@ import React, { useState, useContext, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { GameContext } from "../context/GameContext";
 import { AuthContext } from "../context/AuthContext.jsx";
-import "./ChoosePet.css"
-import { POKEDEX } from '../utils/pokedex.js'
+import "./ChoosePet.css";
+import { DINODEX } from '../utils/dinodex.js';
 
 const ChoosePet = () => {
-        const navigate = useNavigate()
-        const [ mascotaSeleccionada, setMascotaSeleccionada] = useState(null)
-        
-       // coger la función para guardar los datos
-        const { elegirMascota, puedeAdoptar } = useContext(GameContext)
-        const { user } = useContext(AuthContext)
+    const navigate = useNavigate();
+    const [mascotaSeleccionada, setMascotaSeleccionada] = useState(null);
+    
+    // 1. Traemos los datos de nuestros Contextos
+    const { elegirMascota, puedeAdoptar } = useContext(GameContext);
+    const { user } = useContext(AuthContext);
 
-        // conseguir el nombre de las mascotas que tiene el usuario y sino me das un array vacío, ponemos ? para que si no sale nada, aparezca undefined en vez de saltar un error
-        const mascotasConseguidas = user?.pets?.map(mascota => mascota.nombre) || [];
+    // --- LÓGICA DE ESTADO DERIVADO ---
+    // 2. Calculamos las mascotas que el usuario ya tiene
+    const mascotasConseguidas = user?.pets?.map(mascota => mascota.nombre) || [];
 
-        //sacamos las mascotas que siguen disponibles para elegir porque cuando ya no quede ninguno para elegir, mandaremos un mensaje al usuario
-        const mascotasDisponibles = Object.keys(POKEDEX).filter((nombrePokemon) => !mascotasConseguidas.includes(nombrePokemon))
-        
-        const confirmarEleccion = () => {
-            if (!mascotaSeleccionada) return; 
+    // 3. Calculamos cuáles quedan libres
+    const mascotasDisponibles = Object.keys(DINODEX).filter(
+        (nombreDino) => !mascotasConseguidas.includes(nombreDino)
+    );
 
-            // Metemos la mascota elegida en la mochila global
-            elegirMascota(mascotaSeleccionada);
-            navigate('/dashboard');
+    // 4. Preparamos las tarjetas visuales (cortamos a 3 opciones)
+    const opcionesParaAdoptar = mascotasDisponibles.slice(0, 3).map(nombreDino => {
+        const infoFase1 = DINODEX[nombreDino][0]; 
+        return {
+            idDino: nombreDino,       // Ej: 'rex'
+            tipo: infoFase1.tipo,     // Ej: 'Fuego'
+            imagenHuevo: infoFase1.egg // Ej: '/RexEgg.png'
+        };
+    });
+
+    // --- FUNCIÓN DE CONFIRMACIÓN ---
+    const confirmarEleccion = () => {
+        if (!mascotaSeleccionada) return; 
+        elegirMascota(mascotaSeleccionada);
+        navigate('/dashboard');
+    };
+
+    // --- PROTECCIÓN DE RUTA (Tu genialidad) ---
+    useEffect(() => {
+        if (!user) return;
+        // Si es partida nueva, pase VIP
+        if (!user.pets || user.pets.length === 0) return;
+        // Si ya tiene dinos pero NO tiene espacio, lo echamos de aquí
+        if (!puedeAdoptar) {
+            navigate("/dashboard");
         }
-        //añadimos esto para que no puedan entrar a /choose desde la barra del navegador
-        useEffect(() => {
-            // Si el usuario todavía no ha cargado del todo, esperamos en silencio.
-            if (!user) return;
-
-            // Si la mochila del usuario está VACÍA, es una partida nueva. 
-            // Le damos pase VIP para quedarse, pase lo que pase.
-            if (!user.pets || user.pets.length === 0) return;
-
-            // Si ya tiene Pokémon en la mochila, entonces SÍ aplicamos la seguridad estricta.
-            if (!puedeAdoptar) {
-                navigate("/dashboard");
-            }
     }, [user, puedeAdoptar, navigate]);
 
-return (
+    return (
         <div className="choose">
-                    <h2>¡Elige la mascota que quieras!</h2>
-                    <div className="botones">
-                        {/* Como ya hemos filtrado arriba, aquí solo usamos el array y lo cortamos a 3 */}
-                        {mascotasDisponibles.slice(0, 3).map((nombrePokemon) => {
-                            const imagenHuevo = POKEDEX[nombrePokemon][0].egg;
-                            const tipoHuevo = POKEDEX[nombrePokemon][0].tipo;
-
-                            return (
-                                <div className="eggCard" key={nombrePokemon}>
-                                    <button 
-                                        className={`btn-juego ${mascotaSeleccionada === nombrePokemon ? 'seleccionado' : ''}`} 
-                                        onClick={() => setMascotaSeleccionada(nombrePokemon)}
-                                    >
-                                        {tipoHuevo}
-                                    </button>
-                                    <img
-                                        src={imagenHuevo} 
-                                        alt={`Huevo de ${tipoHuevo}`} 
-                                    />
-                                </div>
-                            );
-                        })} 
+            <h2>¡Elige la mascota que quieras!</h2>
+            
+            <div className="botones">
+                {/* 5. Pintamos las opciones de forma súper limpia */}
+                {opcionesParaAdoptar.map((opcion) => (
+                    <div className="eggCard" key={opcion.idDino}>
+                        <button 
+                            className={`btn-juego ${mascotaSeleccionada === opcion.idDino ? 'seleccionado' : ''}`} 
+                            onClick={() => setMascotaSeleccionada(opcion.idDino)}
+                        >
+                            {opcion.tipo}
+                        </button>
+                        <img
+                            src={opcion.imagenHuevo} 
+                            alt={`Huevo de ${opcion.tipo}`} 
+                        />
                     </div>
+                ))} 
+            </div>
 
-                    {mascotaSeleccionada && (
-                        <div className="buttonConfirmado">
-                            <p>
-                                {`Has elegido el huevo de ${POKEDEX[mascotaSeleccionada][0].tipo}. ¿Estás seguro?`}
-                            </p>
-                            <button onClick={confirmarEleccion}>Adoptar y empezar</button>
-                        </div>
-                    )}
+            {/* 6. Si ha seleccionado uno, le mostramos el botón final */}
+            {mascotaSeleccionada && (
+                <div className="buttonConfirmado">
+                    <p>
+                        {`Has elegido el huevo de ${DINODEX[mascotaSeleccionada][0].tipo}. ¿Estás seguro?`}
+                    </p>
+                    <button onClick={confirmarEleccion}>Adoptar y empezar</button>
+                </div>
+            )}
         </div>
     );
 };

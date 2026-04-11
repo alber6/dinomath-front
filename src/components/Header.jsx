@@ -1,18 +1,18 @@
 import { useContext } from 'react';
 import { GameContext } from '../context/GameContext';
 import { AuthContext } from '../context/AuthContext';
-import { POKEDEX } from '../utils/pokedex.js'
+import { DINODEX } from '../utils/dinodex.js'
 
 const Header = () => {
     const { mascotaGlobal, xp, nivel } = useContext(GameContext);
     const { user } = useContext(AuthContext); //Sacamos al usuario logueado
 
-    // añadimos estas lineas de código para añadir el nombre del pokemon en el header
+    // añadimos estas lineas de código para añadir el nombre del dinosaurio en el header
     let nombreMascota = "";
     console.log("Valor de mascotaGlobal:", mascotaGlobal);
 if (mascotaGlobal) {
-    // Buscamos la línea en la nueva POKEDEX (ej: POKEDEX["bulbasaur"])
-    const lineaEvolutiva = POKEDEX[mascotaGlobal];
+    // Buscamos la línea en la nueva DINODEX (ej: DINODEX["bulbasaur"])
+    const lineaEvolutiva = DINODEX[mascotaGlobal];
 
     //  Solo entramos si lineaEvolutiva no es undefined
     if (lineaEvolutiva && Array.isArray(lineaEvolutiva)) {
@@ -20,16 +20,16 @@ if (mascotaGlobal) {
         const faseActual = lineaEvolutiva
             .slice()
             .reverse()
-            .find(poke => nivel >= poke.nivelReq);
+            .find(dino => nivel >= dino.nivelReq);
 
         // Si encontramos la fase, extraemos el nombre
         if (faseActual) {
             nombreMascota = faseActual.nombre;
         }
     } else {
-        // Si no existe en la Pokedex, mostramos un aviso amigable
+        // Si no existe en la DINODEX, mostramos un aviso amigable
         nombreMascota = "Desconocido";
-        console.warn(`La mascota "${mascotaGlobal}" no está en la POKEDEX`);
+        console.warn(`La mascota "${mascotaGlobal}" no está en la DINODEX`);
     }
 }
     return (

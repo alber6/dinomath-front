@@ -47,13 +47,8 @@
   height: 300px;
 }
 
-.eggCard > img {
-  width: 200px;
-  border-radius: 8px;
-}
-
 .eggCard img {
-  width: 180px; 
+  width: 450px; 
   z-index: 1; 
   transition: transform 0.3s ease;
 }

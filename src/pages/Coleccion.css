@@ -12,15 +12,18 @@
 }
 
 /* ESTILO BASE DE LA TARJETA */
-.pokedex-card {
+.dinodex-card {
   border-radius: 20px;
   padding: 20px;
   display: flex;
   flex-direction: column;
   align-items: center;
   gap: 10px;
-  width: 200px; /* Un ancho fijo queda mejor para cartas */
-  transition: all 0.3s ease;
+  width: 400px;
+  height: 450px;
+  /* Usamos un 'cubic-bezier' en lugar de 'ease' para darle un efecto 
+     muy sutil de "rebote" al levantar y soltar la carta */
+  transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275), box-shadow 0.4s ease;
 }
 
 #btn-cards{
@@ -29,89 +32,115 @@
   width: 150px;
   }
   
-.pokedex-card h3 {
+.dinodex-card h3 {
   margin: 0;
   font-size: 1.1rem;
   text-transform: capitalize;
 }
 
 /* TARJETA DESBLOQUEADA */
-.pokedex-card.desbloqueado {
+.dinodex-card.desbloqueado {
   background-color: #FFFFFF;
-  border: 3px solid #3B4CCA; /* Borde azul Pokémon */
-  box-shadow: 0 8px 20px rgba(59, 76, 202, 0.15);
+  border: 6px solid #3B4CCA; 
   padding: 10px 25px 10px 25px;
+  /* Doble sombra: una pequeña y oscura para el peso, y otra grande azulada para el ambiente */
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.08), 0 6px 6px rgba(59, 76, 202, 0.12);
 }
 
-.pokedex-card.desbloqueado h3 {
+/* LA MAGIA DEL MOVIMIENTO: Cuando pasas el ratón por la carta desbloqueada */
+.dinodex-card.desbloqueado:hover {
+  /* Se levanta hacia el usuario y crece un 2% */
+  transform: translateY(-12px) scale(1.02);
+  
+  /* La sombra se expande muchísimo, simulando que la carta está flotando más alto */
+  box-shadow: 0 25px 40px rgba(0, 0, 0, 0.12), 0 15px 20px rgba(59, 76, 202, 0.25);
+}
+
+.dinodex-card.desbloqueado h3 {
   color: #3B4CCA;
 }
 
 /* TARJETA BLOQUEADA */
-.pokedex-card.bloqueado {
-  background-color: #EDF2F7; /* Gris claro */
-  border: 3px dashed #CBD5E0; /* Borde punteado gris */
-  box-shadow: none;
+.dinodex-card.bloqueado {
+  background-color: #EDF2F7; 
+  border: 3px dashed #CBD5E0;
+  padding: 13px 28px; 
+  
+  /* Sombra INVERTIDA (inset): Hace que parezca que el hueco está tallado hacia dentro de la pared */
+  box-shadow: inset 0 4px 8px rgba(0, 0, 0, 0.06);
+  opacity: 0.85; /* Un poco transparente para quitarle protagonismo visual */
 }
 
-.pokedex-card.bloqueado h3 {
+/* EFECTO HOVER SUTIL: Para la tarjeta bloqueada */
+.dinodex-card.bloqueado:hover {
+  /* Se levanta solo un poquitito para que se sienta interactiva, pero sigue siendo "pesada" */
+  transform: translateY(-4px);
+  opacity: 1; /* Recupera su color original */
+  
+  /* Pierde la sombra hundida y proyecta una muy suave hacia afuera */
+  box-shadow: 0 8px 15px rgba(0, 0, 0, 0.05);
+}
+
+.dinodex-card.bloqueado h3 {
   color: #A0AEC0;
 }
 
 /* Contenedor y efecto de imágenes */
-.pokedex-img-container {
-  width: 100px;
-  height: 150px;
+.dinodex-img-container {
+  width: 300px;
+  height: 250px;
   margin: 0 auto;
   display: flex;
   align-items: center;
   justify-content: center;
+  align-content: center;
 }
 
-.pokedex-img {
-  width: 150px;
+.dinodex-img {
+  width: 400px;
   height: auto;
   transition: transform 0.3s ease;
 }
 
+
 /* Efecto sombra negra para bloqueados */
-.bloqueado .pokedex-img {
+.bloqueado .dinodex-img {
   filter: brightness(0); 
   opacity: 0.3; /* Aún más clarito para que quede elegante en fondo claro */
 }
 
-.desbloqueado .pokedex-img {
+.desbloqueado .dinodex-img {
   filter: drop-shadow(0 4px 6px rgba(0, 0, 0, 0.15));
 }
 
-.desbloqueado:hover .pokedex-img {
-  transform: scale(1.15) translateY(-5px); /* Flota al pasar el ratón */
-}
+/* .desbloqueado:hover .dinodex-img {
+  transform: scale(1.15) translateY(-5px); 
+} */
 
 /* Texto de la tarjeta */
-.pokedex-txt {
+.dinodex-txt {
   font-size: 0.8rem;
   color: #718096;
   font-weight: bold;
 }
 
 @media (max-width: 760px){
-  .pokedex-card {
+  .dinodex-card {
     width: 180px;
     height: 310px;
   }
-  .pokedex-card h3 {
+  .dinodex-card h3 {
     margin: 0;
     font-size: 0.8rem;
   }
   /* Contenedor y efecto de imágenes */
-  .pokedex-img-container {
+  .dinodex-img-container {
     height: 150px;
   }
-  .pokedex-img{
+  .dinodex-img{
     width: 120px;
   }
-  .pokedex-card.bloqueado p, .pokedex-card.desbloqueado p, .etiqueta-activa  {
+  .dinodex-card.bloqueado p, .dinodex-card.desbloqueado p, .etiqueta-activa  {
     font-size: 0.8rem;
   }
 
@@ -123,46 +152,46 @@
 }
 
 @media (max-width: 690px){
-  .pokedex-card {
+  .dinodex-card {
     width: 150px;
     height: 260px;
   }
-    .pokedex-card h3 {
+    .dinodex-card h3 {
     margin: 0;
     font-size: 0.8rem;
   }
 
   /* Contenedor y efecto de imágenes */
-  .pokedex-img-container {
+  .dinodex-img-container {
     height: 100px;
   }
-  .pokedex-img{
+  .dinodex-img{
     width: 100px;
   }
-  .pokedex-card.bloqueado p, .pokedex-card.desbloqueado p, .etiqueta-activa  {
+  .dinodex-card.bloqueado p, .dinodex-card.desbloqueado p, .etiqueta-activa  {
     font-size: 0.7rem;
   }
 }
 
 @media (max-width: 600px) {
-  .pokedex-card {
+  .dinodex-card {
     width: 120px;
     height: 210px;
   }
-  .pokedex-card h3 {
+  .dinodex-card h3 {
     margin: 0;
     font-size: 0.5rem;
   }
 
   /* Contenedor y efecto de imágenes */
-  .pokedex-img-container {
+  .dinodex-img-container {
     width: 100px;
     height: 80px;
   }
-  .pokedex-card.bloqueado p, .pokedex-card.desbloqueado p, .etiqueta-activa  {
+  .dinodex-card.bloqueado p, .dinodex-card.desbloqueado p, .etiqueta-activa  {
     font-size: 0.5rem;
   }
-  .pokedex-card.desbloqueado {
+  .dinodex-card.desbloqueado {
     padding: 5px;
   }
 
@@ -180,21 +209,21 @@
     justify-content: center;
     align-items: center;
   }
-  .pokedex-card {
+  .dinodex-card {
     width: 180px;
     height: 250px;
   }
 
   /* Contenedor y efecto de imágenes */
-  .pokedex-img-container {
+  .dinodex-img-container {
     width: 130px;
     height: 120px;
   }
 
-  .pokedex-card.desbloqueado {
+  .dinodex-card.desbloqueado {
     padding: 1px;
   }
-  .pokedex-card.bloqueado p, .pokedex-card.desbloqueado p, .etiqueta-activa, .pokedex-card h3  {
+  .dinodex-card.bloqueado p, .dinodex-card.desbloqueado p, .etiqueta-activa, .dinodex-card h3  {
     font-size: 0.6rem;
   }
 
