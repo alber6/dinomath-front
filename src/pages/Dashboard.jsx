@@ -128,7 +128,7 @@ const Dashboard = () => {
             <div id="container-dashboard">
                 <div id="petImg">
                     <img 
-                        className={nivel === 1 || nivel === 2 || nivel === 3 ? "evolucion-animacion" : ""}
+                        className={nivel === 1 || nivel === 5 || nivel === 10 || nivel === 20 ? "evolucion-animacion" : ""}
                         key={datosMascota?.nombre}
                         src={datosMascota?.imagen} 
                         alt={datosMascota?.nombre} 

@@ -1,9 +1,9 @@
 export const DINODEX = {
     rex: [
         { nivelReq: 1, id: 1, nombre: 'Huevo de Rex', tipo: 'Fuego', egg: '/RexEgg.png', imagen: '/RexEgg.png' },
-        { nivelReq: 5, id: 2, nombre: 'Rex Bebé', imagen: '/RexBaby.png' },
-        { nivelReq: 10, id: 3, nombre: 'Rex Joven', imagen: '/RexYoung.png' },
-        { nivelReq: 20, id: 4, nombre: 'Rex Adulto', imagen: '/RexAdult.png' }
+        { nivelReq: 2, id: 2, nombre: 'Rex Bebé', imagen: '/RexBaby.png' },
+        { nivelReq: 3, id: 3, nombre: 'Rex Joven', imagen: '/RexYoung.png' },
+        { nivelReq: 4, id: 4, nombre: 'Rex Adulto', imagen: '/RexAdult.png' }
     ],
     triceratops: [
         { nivelReq: 1, id: 5, nombre: 'Huevo de Triceratops', tipo: 'Tierra', egg: '/TriceEgg.png', imagen: '/TriceEgg.png' },
