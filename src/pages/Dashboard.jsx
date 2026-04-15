@@ -29,7 +29,6 @@ const Dashboard = () => {
     // --- Sincronización en segundo plano de los dtos por si quieres seguir la partida en tu navegador que ya te ha reconocido o si vas a otro dispositvo que al entrar se haya sincronizdo los últimos datos de la partida ---
     useEffect(() => {
         const sincronizarDatos = async () => {
-            // Si por algún motivo no hay ID o token, cortamos la función aquí
             if (!user?._id || !token) return;
 
             try {
@@ -37,25 +36,33 @@ const Dashboard = () => {
                     method: "GET",
                     headers: {
                         "Authorization": `Bearer ${token}` 
-                    }
+                    },
+                    cache: 'no-store' // 🚀 EL ANTI-CACHÉ: Obliga a ir al servidor real siempre
                 });
 
                 if (response.ok) {
                     const datosFrescos = await response.json();
                     loginAuth(datosFrescos, token); 
+                    console.log("¡Datos frescos de verdad sin caché!");
                 }
             } catch (error) {
-                console.log("Error sincronizando en segundo plano", error);
+                console.log("Error sincronizando", error);
             }
         };
+
         sincronizarDatos();
 
-        // Si el niño estaba en otra pestaña (o en el móvil) 
-        // y hace clic de vuelta en esta pantalla,se descarga los datos otra vez.
-        window.addEventListener('focus', sincronizarDatos);
+        // 🚀 EL CAMBIO: 'visibilitychange' detecta perfectamente cuando cambias de pestaña o minimizas
+        const manejarCambioDePantalla = () => {
+            if (document.visibilityState === 'visible') {
+                sincronizarDatos();
+            }
+        };
 
-        // Siempre que añadas un 'addEventListener' hay que quitarlo en el 'return' para que el ordenador no se sature de memoria.
-        return () => window.removeEventListener('focus', sincronizarDatos)
+        document.addEventListener('visibilitychange', manejarCambioDePantalla);
+
+        return () => document.removeEventListener('visibilitychange', manejarCambioDePantalla);
+
     }, [user?._id, token, loginAuth]);
 
     // --- Generar primera operación ---
