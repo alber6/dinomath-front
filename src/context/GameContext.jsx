@@ -24,21 +24,31 @@ const GameProvider = ({ children }) => {
         return nivelGuardado ? parseInt(nivelGuardado) : 1;
     });
     
-    // --- SINCRONIZACIÓN LOCAL (EL WATCHER INTELIGENTE) ---
+// --- SINCRONIZACIÓN LOCAL (EL WATCHER INTELIGENTE DEFINITIVO) ---
     useEffect(() => {
-        if (user && mascotaGlobal) {
-            // 1. Primero comprobamos si la mascota en pantalla es la Activa.
-            // Sabemos que tu Backend guarda mascotaActiva a la perfección, así que nos fiamos de esto.
-            if (user.mascotaActiva && user.mascotaActiva.nombre === mascotaGlobal) {
+        if (user) {
+            // CASO 1: DISPOSITIVO NUEVO (El localStorage estaba vacío)
+            // Si no tenemos mascota seleccionada en pantalla, pero la base de datos 
+            // nos dice que este usuario estaba jugando con una, ¡la cargamos de golpe!
+            if (!mascotaGlobal && user.mascotaActiva) {
+                setMascotaGlobal(user.mascotaActiva.nombre);
                 setXp(user.mascotaActiva.xp);
                 setNivel(user.mascotaActiva.nivel);
             } 
-            // 2. Si está mirando otra mascota de su colección, buscamos en el array
-            else if (user.pets) {
-                const datosFrescos = user.pets.find(p => p.nombre === mascotaGlobal);
-                if (datosFrescos) {
-                    setXp(datosFrescos.xp);
-                    setNivel(datosFrescos.nivel);
+            // CASO 2: YA ESTAMOS JUGANDO (El caso normal)
+            else if (mascotaGlobal) {
+                // Comprobamos la mascota activa
+                if (user.mascotaActiva && user.mascotaActiva.nombre === mascotaGlobal) {
+                    setXp(user.mascotaActiva.xp);
+                    setNivel(user.mascotaActiva.nivel);
+                } 
+                // O comprobamos la colección si está mirando otro dinosaurio
+                else if (user.pets) {
+                    const datosFrescos = user.pets.find(p => p.nombre === mascotaGlobal);
+                    if (datosFrescos) {
+                        setXp(datosFrescos.xp);
+                        setNivel(datosFrescos.nivel);
+                    }
                 }
             }
         }
