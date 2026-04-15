@@ -48,8 +48,14 @@ const Dashboard = () => {
                 console.log("Error sincronizando en segundo plano", error);
             }
         };
-
         sincronizarDatos();
+
+        // Si el niño estaba en otra pestaña (o en el móvil) 
+        // y hace clic de vuelta en esta pantalla,se descarga los datos otra vez.
+        window.addEventListener('focus', sincronizarDatos);
+
+        // Siempre que añadas un 'addEventListener' hay que quitarlo en el 'return' para que el ordenador no se sature de memoria.
+        return () => window.removeEventListener('focus', sincronizarDatos)
     }, [user?._id, token, loginAuth]);
 
     // --- Generar primera operación ---
