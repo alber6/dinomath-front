@@ -163,7 +163,7 @@ const GameProvider = ({ children }) => {
         <GameContext.Provider value={{ 
             mascotaGlobal, setMascotaGlobal, xp, nivel, 
             ganarExperiencia, reinicioPartida, elegirMascota, 
-            equiparMascota, puedeAdoptar 
+            equiparMascota, puedeAdoptar, guardarEnBackend
         }}>
             {children}
         </GameContext.Provider>

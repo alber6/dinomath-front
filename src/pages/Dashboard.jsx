@@ -11,7 +11,7 @@ import { DINODEX } from "../utils/dinodex.js";
 import "./Dashboard.css";
 
 const Dashboard = () => {
-    const { mascotaGlobal, xp, nivel, ganarExperiencia, puedeAdoptar } = useContext(GameContext);
+    const { mascotaGlobal, xp, nivel, ganarExperiencia, puedeAdoptar, guardarEnBackend } = useContext(GameContext);
     const { num1, num2, operador, nuevaOperacion, comprobarResultado } = useMathsEngine();
     const { juegoCompletado } = useMascotas();
     const navigate = useNavigate();
@@ -66,28 +66,43 @@ const revisarEvolucion = (nivelAntiguo, nivelNuevo) => {
         }
     };
 
-    // --- CÓMO FUNCIONA EL JUEGO ---
-    const alEnviarRespuesta = (datosDelFormulario) => {
+ // --- CÓMO FUNCIONA EL JUEGO ---
+    const alEnviarRespuesta = async (datosDelFormulario) => {
         const esCorrecto = comprobarResultado(datosDelFormulario.respuesta);
 
         if (esCorrecto) {
             setMensajeFeedback('¡Correcto! 🎉 +25 XP');
-            ganarExperiencia(25); 
+            ganarExperiencia(25);
 
-            // Calculamos manualmente el nivel futuro
+            // Calculamos manualmente la XP y el nivel futuros en variables nuevas
+            let nuevaXp = xp + 25;
             let nivelFuturo = nivel;
-            if (xp + 25 >= 100) {
+
+            // Si sobrepasa los 100 de XP, sube de nivel y restamos 100 a la XP (ej: 110 se queda en 10)
+            if (nuevaXp >= 100) {
                 nivelFuturo = nivel + 1;
+                nuevaXp = nuevaXp - 100; 
             }
             
             revisarEvolucion(nivel, nivelFuturo);
             nuevaOperacion();  
-            reset();           
+            reset();
+
+            // sacamos el arrray de pets actualizados para luego mandarlo al backend 
+            const petsActualizadas = user.pets.map(pet => {
+                if (pet.nombre === mascotaGlobal) {
+                    // Le pisamos la XP y el Nivel con nuestras variables recién calculadas
+                    return { ...pet, xp: nuevaXp, nivel: nivelFuturo };
+                }
+                return pet;
+            });
+
+            // usamos esta función dentro de la lógica del juego para que se sincronice y se actualice de inmediato los datos al cambiar de un dispositivo a otro
+            await guardarEnBackend(mascotaGlobal, nuevaXp, nivelFuturo, petsActualizadas);
         } else {
             setMensajeFeedback('Mmm... casi. ¡Vuelve a intentarlo! 💪');
             reset(); 
         }
-
         // Borramos el feedback a los 2 segundos
         setTimeout(() => setMensajeFeedback(''), 2000);
     };
