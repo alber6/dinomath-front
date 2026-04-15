@@ -58,18 +58,11 @@ const Dashboard = () => {
     }, [nuevaOperacion]);
 
     // --- LÓGICA DE EVOLUCIÓN ---
-    const revisarEvolucion = (nivelAntiguo, nivelNuevo) => {
-        // Seguro de vida por si aún no ha cargado la mascota global
-        if (!mascotaGlobal || !DINODEX[mascotaGlobal]) return;
-
-        // linea es un array de las 4 fases de por ejemplo rex
-        const linea = DINODEX[mascotaGlobal];
-        //esto lo que hace es sacar el nivel máximo de la última evolucion del rex
-        const nivelMax = linea[linea.length - 1].nivelReq;
-
-        //doble verificacion para que si un dino es nivel 20 y al volver a entrar en la app sigue siendo nivel 20 no vuelva a aparecer el modal
-        if (nivelAntiguo < nivelNuevo && nivelNuevo === nivelMax) {
-            setMostrarModal(true);
+const revisarEvolucion = (nivelAntiguo, nivelNuevo) => {
+        // Solo nos interesa el momento exacto en el que pasa de 9 a 10
+        // (o si por algún motivo sube varios niveles de golpe y aterriza en 10 o más)
+        if (nivelAntiguo < 10 && nivelNuevo >= 10) {
+            setMostrarModal(true); 
         }
     };
 

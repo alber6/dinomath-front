@@ -143,21 +143,21 @@ const GameProvider = ({ children }) => {
 
     // En lugar de tener un estado que diga 'puedeAdoptar = false' e intentar cambiarlo...
     // ...lo calculamos "al vuelo" leyendo la Dinodex. Así es imposible que se desincronice.
-    let familiasEnNivelProgreso = 0;
-    if (user && user.pets) {
-        user.pets.forEach(pet => {
-            // Buscamos si la mascota ha llegado al nivel 10 para desbloquear la siguiente adopción
-            if (pet.nivel >= 10) {
-                familiasEnNivelProgreso++;
-            }
-        });
-    }
-    // un 1 porque todo usuario al inicio tiene una mascota, si llega a nivel 10 se le suma 1, entonces ya tiene 2 mascotas
-    const limiteMascotas = 1 + familiasEnNivelProgreso;
-    // ver cuantas mascotas tiene el usuario sino dame 0
+    // Obtenemos cuántas mascotas tiene el usuario actualmente
     const mascotasActuales = user?.pets?.length || 0;
-    
-    const puedeAdoptar = mascotasActuales < limiteMascotas;
+
+    // Contamos cuántas han alcanzado el nivel 10 (esto SUSTITUYE a tu antiguo forEach)
+    const familiasEnNivelProgreso = user?.pets?.filter(pet => pet.nivel >= 10).length || 0;
+
+    // Calculamos el límite permitido: 1 inicial + los desbloqueos ganados.
+    // Usamos Math.min(..., 5) para que el límite NUNCA supere las 5 familias existentes.
+    const limiteMascotas = Math.min(1 + familiasEnNivelProgreso, 5);
+
+    // Verificamos si puede adoptar:
+    // Debe tener menos mascotas de las que su límite actual permite.
+    // Y por seguridad, debe tener menos de 5 (el total de familias del juego).
+    // modificar el 5 si se amplia la dinodex
+    const puedeAdoptar = mascotasActuales < limiteMascotas && mascotasActuales < 5;
 
     return (
         <GameContext.Provider value={{ 
