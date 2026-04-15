@@ -24,32 +24,31 @@ const GameProvider = ({ children }) => {
         return nivelGuardado ? parseInt(nivelGuardado) : 1;
     });
     
-// --- SINCRONIZACIÓN LOCAL (EL WATCHER INTELIGENTE DEFINITIVO) ---
+// --- SINCRONIZACIÓN LOCAL (EL WATCHER A PRUEBA DE BALAS) ---
     useEffect(() => {
-        if (user) {
-            // CASO 1: DISPOSITIVO NUEVO (El localStorage estaba vacío)
-            // Si no tenemos mascota seleccionada en pantalla, pero la base de datos 
-            // nos dice que este usuario estaba jugando con una, ¡la cargamos de golpe!
-            if (!mascotaGlobal && user.mascotaActiva) {
-                setMascotaGlobal(user.mascotaActiva.nombre);
-                setXp(user.mascotaActiva.xp);
-                setNivel(user.mascotaActiva.nivel);
-            } 
-            // CASO 2: YA ESTAMOS JUGANDO (El caso normal)
-            else if (mascotaGlobal) {
-                // Comprobamos la mascota activa
-                if (user.mascotaActiva && user.mascotaActiva.nombre === mascotaGlobal) {
-                    setXp(user.mascotaActiva.xp);
-                    setNivel(user.mascotaActiva.nivel);
-                } 
-                // O comprobamos la colección si está mirando otro dinosaurio
-                else if (user.pets) {
-                    const datosFrescos = user.pets.find(p => p.nombre === mascotaGlobal);
-                    if (datosFrescos) {
-                        setXp(datosFrescos.xp);
-                        setNivel(datosFrescos.nivel);
-                    }
-                }
+        // Si no hay usuario o aún no han cargado las mascotas de la BD, cortamos aquí.
+        if (!user || !user.pets || user.pets.length === 0) return;
+
+        // 1. ¿Qué mascota debemos mostrar?
+        // - Si ya tienes una elegida en esta pantalla (mascotaGlobal), usamos esa.
+        // - Si acabas de entrar en un PC/Móvil nuevo, mascotaGlobal será 'null', así que 
+        //   miramos a ver qué mascota estabas usando en tu última partida, o cogemos la primera.
+        const nombreMascota = mascotaGlobal || user.mascotaActiva?.nombre || user.pets[0]?.nombre;
+
+        if (nombreMascota) {
+            // Si estábamos en un dispositivo nuevo y la pantalla estaba vacía, la configuramos
+            if (!mascotaGlobal) {
+                setMascotaGlobal(nombreMascota);
+            }
+
+            // 2. LA ÚNICA FUENTE DE VERDAD (El arreglo definitivo)
+            // Vamos directamente al array de mascotas, buscamos la nuestra y leemos sus datos.
+            // Así nos da igual lo que diga el localStorage, siempre veremos los datos 100% reales.
+            const datosReales = user.pets.find(p => p.nombre === nombreMascota);
+
+            if (datosReales) {
+                setXp(datosReales.xp);
+                setNivel(datosReales.nivel);
             }
         }
     }, [user, mascotaGlobal]);
