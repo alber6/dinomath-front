@@ -23,15 +23,24 @@ const GameProvider = ({ children }) => {
         const nivelGuardado = localStorage.getItem('mascotaNivel');
         return nivelGuardado ? parseInt(nivelGuardado) : 1;
     });
-    // SINCRONIZACIÓN LOCAL Si detectamos que el usuario acaba de iniciar sesión (el user cambió),
-    // leemos su 'mascotaActiva' de la base de datos y la ponemos en la pantalla.
+    // --- SINCRONIZACIÓN LOCAL (EL WATCHER) ---
+    // Si detectamos que la base de datos se ha actualizado (el user cambió) 
+    // o si el jugador acaba de cambiar de mascota en la pantalla...
     useEffect(() => {
-        if (user && user.mascotaActiva && user.mascotaActiva.nombre) {
-            setMascotaGlobal(user.mascotaActiva.nombre);
-            setXp(user.mascotaActiva.xp);
-            setNivel(user.mascotaActiva.nivel);
+        // 1. Nos aseguramos de que ya tenemos los datos y una mascota elegida
+        if (user && user.pets && mascotaGlobal) {
+            // 2. Buscamos la información más fresca de ESA mascota dentro del array
+            const datosFrescos = user.pets.find(p => p.nombre === mascotaGlobal);
+            
+            if (datosFrescos) {
+                // Actualizamos la pantalla con la verdad absoluta
+                setXp(datosFrescos.xp);
+                setNivel(datosFrescos.nivel);
+            }
         }
-    }, [user]);
+    }, [user, mascotaGlobal]); 
+    // ^ Este array de dependencias es la clave: se dispara si 'user' 
+    // se descarga de nuevo o si 'mascotaGlobal' cambia.
 
     // Cada vez que ganemos XP o subamos de nivel, actualizamos la "memoria a corto plazo" (localStorage)
     useEffect(() => {
