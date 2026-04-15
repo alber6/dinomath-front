@@ -23,24 +23,26 @@ const GameProvider = ({ children }) => {
         const nivelGuardado = localStorage.getItem('mascotaNivel');
         return nivelGuardado ? parseInt(nivelGuardado) : 1;
     });
-    // --- SINCRONIZACIÓN LOCAL (EL WATCHER) ---
-    // Si detectamos que la base de datos se ha actualizado (el user cambió) 
-    // o si el jugador acaba de cambiar de mascota en la pantalla...
+    
+    // --- SINCRONIZACIÓN LOCAL (EL WATCHER INTELIGENTE) ---
     useEffect(() => {
-        // 1. Nos aseguramos de que ya tenemos los datos y una mascota elegida
-        if (user && user.pets && mascotaGlobal) {
-            // 2. Buscamos la información más fresca de ESA mascota dentro del array
-            const datosFrescos = user.pets.find(p => p.nombre === mascotaGlobal);
-            
-            if (datosFrescos) {
-                // Actualizamos la pantalla con la verdad absoluta
-                setXp(datosFrescos.xp);
-                setNivel(datosFrescos.nivel);
+        if (user && mascotaGlobal) {
+            // 1. Primero comprobamos si la mascota en pantalla es la Activa.
+            // Sabemos que tu Backend guarda mascotaActiva a la perfección, así que nos fiamos de esto.
+            if (user.mascotaActiva && user.mascotaActiva.nombre === mascotaGlobal) {
+                setXp(user.mascotaActiva.xp);
+                setNivel(user.mascotaActiva.nivel);
+            } 
+            // 2. Si está mirando otra mascota de su colección, buscamos en el array
+            else if (user.pets) {
+                const datosFrescos = user.pets.find(p => p.nombre === mascotaGlobal);
+                if (datosFrescos) {
+                    setXp(datosFrescos.xp);
+                    setNivel(datosFrescos.nivel);
+                }
             }
         }
-    }, [user, mascotaGlobal]); 
-    // ^ Este array de dependencias es la clave: se dispara si 'user' 
-    // se descarga de nuevo o si 'mascotaGlobal' cambia.
+    }, [user, mascotaGlobal]);
 
     // Cada vez que ganemos XP o subamos de nivel, actualizamos la "memoria a corto plazo" (localStorage)
     useEffect(() => {
