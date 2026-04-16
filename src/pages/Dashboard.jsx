@@ -43,7 +43,6 @@ const Dashboard = () => {
                 if (response.ok) {
                     const datosFrescos = await response.json();
                     loginAuth(datosFrescos, token); 
-                    console.log("¡Datos frescos de verdad sin caché!");
                 }
             } catch (error) {
                 console.log("Error sincronizando", error);
@@ -71,7 +70,7 @@ const Dashboard = () => {
     }, [nuevaOperacion]);
 
     // --- LÓGICA DE EVOLUCIÓN ---
-const revisarEvolucion = (nivelAntiguo, nivelNuevo) => {
+    const revisarEvolucion = (nivelAntiguo, nivelNuevo) => {
         // Solo nos interesa el momento exacto en el que pasa de 9 a 10
         // (o si por algún motivo sube varios niveles de golpe y aterriza en 10 o más)
         if (nivelAntiguo < 10 && nivelNuevo >= 10) {
@@ -79,39 +78,20 @@ const revisarEvolucion = (nivelAntiguo, nivelNuevo) => {
         }
     };
 
- // --- CÓMO FUNCIONA EL JUEGO ---
+// --- CÓMO FUNCIONA EL JUEGO ---
     const alEnviarRespuesta = async (datosDelFormulario) => {
         const esCorrecto = comprobarResultado(datosDelFormulario.respuesta);
 
         if (esCorrecto) {
             setMensajeFeedback('¡Correcto! 🎉 +25 XP');
-            ganarExperiencia(25);
-
-            // Calculamos manualmente la XP y el nivel futuros en variables nuevas
-            let nuevaXp = xp + 25;
-            let nivelFuturo = nivel;
-
-            // Si sobrepasa los 100 de XP, sube de nivel y restamos 100 a la XP (ej: 110 se queda en 10)
-            if (nuevaXp >= 100) {
-                nivelFuturo = nivel + 1;
-                nuevaXp = nuevaXp - 100; 
-            }
-            
-            revisarEvolucion(nivel, nivelFuturo);
+            // 1. Delegamos TODO el trabajo al GameProvider. 
+            // Esto guarda en local, guarda en la nube y nos devuelve los niveles.
+            const { nivelAntiguo, nivelNuevo } = ganarExperiencia(25); 
+            // 2. Comprobamos si hay que sacar el modal de aviso de huevo
+            revisarEvolucion(nivelAntiguo, nivelNuevo);
+            // 3. Preparamos la siguiente ronda
             nuevaOperacion();  
-            reset();
-
-            // sacamos el arrray de pets actualizados para luego mandarlo al backend 
-            const petsActualizadas = user.pets.map(pet => {
-                if (pet.nombre === mascotaGlobal) {
-                    // Le pisamos la XP y el Nivel con nuestras variables recién calculadas
-                    return { ...pet, xp: nuevaXp, nivel: nivelFuturo };
-                }
-                return pet;
-            });
-
-            // usamos esta función dentro de la lógica del juego para que se sincronice y se actualice de inmediato los datos al cambiar de un dispositivo a otro
-            await guardarEnBackend(mascotaGlobal, nuevaXp, nivelFuturo, petsActualizadas);
+            reset();           
         } else {
             setMensajeFeedback('Mmm... casi. ¡Vuelve a intentarlo! 💪');
             reset(); 

@@ -9,7 +9,7 @@ const Header = () => {
 
     // añadimos estas lineas de código para añadir el nombre del dinosaurio en el header
     let nombreMascota = "";
-    console.log("Valor de mascotaGlobal:", mascotaGlobal);
+    
 if (mascotaGlobal) {
     // Buscamos la línea en la nueva DINODEX (ej: DINODEX["bulbasaur"])
     const lineaEvolutiva = DINODEX[mascotaGlobal];

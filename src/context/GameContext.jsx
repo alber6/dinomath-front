@@ -96,8 +96,7 @@ const GameProvider = ({ children }) => {
         }
     };
 
-    //cuando se acierta una operación
-    const ganarExperiencia = (puntosGanados) => {
+const ganarExperiencia = (puntosGanados) => {
         const nuevaXp = xp + puntosGanados;
         let nuevoNivel = nivel;
         let xpFinal = nuevaXp;
@@ -106,20 +105,23 @@ const GameProvider = ({ children }) => {
             nuevoNivel = nivel + 1;
             xpFinal = nuevaXp - 100;
         }
+
         // Actualizamos la pantalla (estado local)
         setNivel(nuevoNivel);
         setXp(xpFinal);
-
-        // Buscamos a esta mascota en la Colección y le actualizamos su nivel personal.
+        // Buscamos a esta mascota en la Colección
         const petsActualizadas = user.pets.map(p => 
             p.nombre === mascotaGlobal 
             ? { ...p, nivel: nuevoNivel, xp: xpFinal } 
             : p
         );
-        // Mandamos los datos a la nube.
-        guardarEnBackend(mascotaGlobal, xpFinal, nuevoNivel, petsActualizadas);
-    };
 
+        // Mandamos los datos a la nube (LA ÚNICA VEZ QUE SE LLAMA)
+        guardarEnBackend(mascotaGlobal, xpFinal, nuevoNivel, petsActualizadas);
+        // 🚀 AÑADIMOS ESTO: Devolvemos los niveles para el modal
+        return { nivelAntiguo: nivel, nivelNuevo: nuevoNivel };
+    };
+    
     const reinicioPartida = () => {
         setMascotaGlobal(null);
         setXp(0);
