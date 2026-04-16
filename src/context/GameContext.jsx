@@ -24,33 +24,34 @@ const GameProvider = ({ children }) => {
         return nivelGuardado ? parseInt(nivelGuardado) : 1;
     });
     
-// --- SINCRONIZACIÓN LOCAL (EL WATCHER A PRUEBA DE BALAS) ---
+// --- SINCRONIZACIÓN LOCAL (EL WATCHER DEFINITIVO V3) ---
     useEffect(() => {
         // Si no hay usuario o aún no han cargado las mascotas de la BD, cortamos aquí.
         if (!user || !user.pets || user.pets.length === 0) return;
 
-        // 1. ¿Qué mascota debemos mostrar?
-        // - Si ya tienes una elegida en esta pantalla (mascotaGlobal), usamos esa.
-        // - Si acabas de entrar en un PC/Móvil nuevo, mascotaGlobal será 'null', así que 
-        //   miramos a ver qué mascota estabas usando en tu última partida, o cogemos la primera.
-        const nombreMascota = mascotaGlobal || user.mascotaActiva?.nombre || user.pets[0]?.nombre;
+        // 👑 LA REGLA DE ORO: La Nube Manda.
+        // Miramos PRIMERO qué mascota está activa en la base de datos.
+        const nombreMascotaNube = user.mascotaActiva?.nombre;
+        
+        // El nombre definitivo será el de la Nube. Si por algún motivo no hay, 
+        // usamos la local. Y si no hay local, la primera de la mochila.
+        const nombreDefinitivo = nombreMascotaNube || mascotaGlobal || user.pets[0]?.nombre;
 
-        if (nombreMascota) {
-            // Si estábamos en un dispositivo nuevo y la pantalla estaba vacía, la configuramos
-            if (!mascotaGlobal) {
-                setMascotaGlobal(nombreMascota);
-            }
-
-            // 2. LA ÚNICA FUENTE DE VERDAD (El arreglo definitivo)
-            // Vamos directamente al array de mascotas, buscamos la nuestra y leemos sus datos.
-            // Así nos da igual lo que diga el localStorage, siempre veremos los datos 100% reales.
-            const datosReales = user.pets.find(p => p.nombre === nombreMascota);
-
-            if (datosReales) {
-                setXp(datosReales.xp);
-                setNivel(datosReales.nivel);
-            }
+        // 🔄 EL CAMBIO AUTOMÁTICO:
+        // Si la mascota que manda la Nube es diferente a la que estás viendo 
+        // en pantalla (mascotaGlobal), la cambiamos automáticamente de golpe.
+        if (nombreDefinitivo && nombreDefinitivo !== mascotaGlobal) {
+            setMascotaGlobal(nombreDefinitivo);
         }
+
+        // Finalmente, buscamos sus datos para poner su nivel y XP correctos
+        const datosReales = user.pets.find(p => p.nombre === nombreDefinitivo);
+
+        if (datosReales) {
+            setXp(datosReales.xp);
+            setNivel(datosReales.nivel);
+        }
+        
     }, [user, mascotaGlobal]);
 
     // Cada vez que ganemos XP o subamos de nivel, actualizamos la "memoria a corto plazo" (localStorage)
@@ -121,7 +122,7 @@ const ganarExperiencia = (puntosGanados) => {
         // 🚀 AÑADIMOS ESTO: Devolvemos los niveles para el modal
         return { nivelAntiguo: nivel, nivelNuevo: nuevoNivel };
     };
-    
+
     const reinicioPartida = () => {
         setMascotaGlobal(null);
         setXp(0);
