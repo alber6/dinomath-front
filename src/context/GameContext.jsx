@@ -24,20 +24,16 @@ const GameProvider = ({ children }) => {
         return nivelGuardado ? parseInt(nivelGuardado) : 1;
     });
     
-// --- SINCRONIZACIÓN LOCAL (EL WATCHER DEFINITIVO V3) ---
+// SINCRONIZACIÓN LOCAL - función para que al cambiar de dispositivo al instante se sincronice
     useEffect(() => {
         // Si no hay usuario o aún no han cargado las mascotas de la BD, cortamos aquí.
         if (!user || !user.pets || user.pets.length === 0) return;
-
-        // 👑 LA REGLA DE ORO: La Nube Manda.
         // Miramos PRIMERO qué mascota está activa en la base de datos.
         const nombreMascotaNube = user.mascotaActiva?.nombre;
-        
         // El nombre definitivo será el de la Nube. Si por algún motivo no hay, 
         // usamos la local. Y si no hay local, la primera de la mochila.
         const nombreDefinitivo = nombreMascotaNube || mascotaGlobal || user.pets[0]?.nombre;
 
-        // 🔄 EL CAMBIO AUTOMÁTICO:
         // Si la mascota que manda la Nube es diferente a la que estás viendo 
         // en pantalla (mascotaGlobal), la cambiamos automáticamente de golpe.
         if (nombreDefinitivo && nombreDefinitivo !== mascotaGlobal) {

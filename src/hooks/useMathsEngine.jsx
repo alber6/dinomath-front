@@ -20,7 +20,7 @@ export const useMathsEngine = () => {
         let n1 = Math.floor(Math.random() * 131) + 20;
         let n2 = Math.floor(Math.random() * 131) + 20;
 
-        // 3. Lógica para la resta: El número mayor siempre debe ir primero para no dar negativos
+        // Lógica para la resta: El número mayor siempre debe ir primero para no dar negativos
         if (esResta) {
             if (n2 > n1) {
                 //si n2 es mayor que n1, hay que darle la vuelta y poner a n1 mayor que n2 paea eso usamos una variable intermedia llamada temp

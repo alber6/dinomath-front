@@ -75,7 +75,7 @@ const Coleccion = () => {
                                             <p>Secreto 🔒</p>
                                         )}
 
-                                        {/* 3. La zona de botones. Solo se muestra en la fase correcta */}
+                                        {/* La zona de botones. Solo se muestra en la fase correcta */}
                                         <div className="estado-mascota">
                                             {estaEntrenando ? (
                                                 <span className="etiqueta-activa">Entrenando</span>

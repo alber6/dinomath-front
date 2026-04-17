@@ -9,26 +9,26 @@ const ChoosePet = () => {
     const navigate = useNavigate();
     const [mascotaSeleccionada, setMascotaSeleccionada] = useState(null);
     
-    // 1. Traemos los datos de nuestros Contextos
+    // Traemos los datos de nuestros Contextos
     const { elegirMascota, puedeAdoptar } = useContext(GameContext);
     const { user } = useContext(AuthContext);
 
-    // --- LÓGICA DE ESTADO DERIVADO ---
-    // 2. Calculamos las mascotas que el usuario ya tiene
+    // LÓGICA DE ESTADO DERIVADO
+    // Calculamos las mascotas que el usuario ya tiene
     const mascotasConseguidas = user?.pets?.map(mascota => mascota.nombre) || [];
 
-    // 3. Calculamos cuáles quedan libres
+    // Calculamos cuáles quedan libres
     const mascotasDisponibles = Object.keys(DINODEX).filter(
         (nombreDino) => !mascotasConseguidas.includes(nombreDino)
     );
 
-    // 4. Preparamos las tarjetas visuales (cortamos a 3 opciones)
+    // Preparamos las tarjetas visuales (cortamos a 3 opciones)
     const opcionesParaAdoptar = mascotasDisponibles.slice(0, 3).map(nombreDino => {
-        const infoFase1 = DINODEX[nombreDino][0]; 
+        const infoFase1 = DINODEX[nombreDino][0];
         return {
-            idDino: nombreDino,       // Ej: 'rex'
-            tipo: infoFase1.tipo,     // Ej: 'Fuego'
-            imagenHuevo: infoFase1.egg // Ej: '/RexEgg.png'
+            idDino: nombreDino,
+            tipo: infoFase1.tipo,
+            imagenHuevo: infoFase1.egg
         };
     });
 
@@ -39,7 +39,7 @@ const ChoosePet = () => {
         navigate('/dashboard');
     };
 
-    // --- PROTECCIÓN DE RUTA (Tu genialidad) ---
+    // PROTECCIÓN DE RUTA (por si el usario le diera por cambiar la direccion de la url directamente) 
     useEffect(() => {
         if (!user) return;
         // Si es partida nueva, pase VIP
@@ -55,7 +55,7 @@ const ChoosePet = () => {
             <h2>¡Elige la mascota que quieras!</h2>
             
             <div className="botones">
-                {/* 5. Pintamos las opciones de forma súper limpia */}
+                {/* Pintamos las opciones de forma súper limpia */}
                 {opcionesParaAdoptar.map((opcion) => (
                     <div className="eggCard" key={opcion.idDino}>
                         <button 
@@ -72,7 +72,7 @@ const ChoosePet = () => {
                 ))} 
             </div>
 
-            {/* 6. Si ha seleccionado uno, le mostramos el botón final */}
+            {/* Si ha seleccionado uno, le mostramos el botón final */}
             {mascotaSeleccionada && (
                 <div className="buttonConfirmado">
                     <p>

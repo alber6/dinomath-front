@@ -37,7 +37,7 @@ const Dashboard = () => {
                     headers: {
                         "Authorization": `Bearer ${token}` 
                     },
-                    cache: 'no-store' // 🚀 EL ANTI-CACHÉ: Obliga a ir al servidor real siempre
+                    cache: 'no-store' // Obliga a ir al servidor real siempre
                 });
 
                 if (response.ok) {
@@ -51,7 +51,7 @@ const Dashboard = () => {
 
         sincronizarDatos();
 
-        // 🚀 EL CAMBIO: 'visibilitychange' detecta perfectamente cuando cambias de pestaña o minimizas
+        // visibilitychange detecta perfectamente cuando cambias de pestaña o minimizas
         const manejarCambioDePantalla = () => {
             if (document.visibilityState === 'visible') {
                 sincronizarDatos();
@@ -84,12 +84,12 @@ const Dashboard = () => {
 
         if (esCorrecto) {
             setMensajeFeedback('¡Correcto! 🎉 +25 XP');
-            // 1. Delegamos TODO el trabajo al GameProvider. 
+            // Delegamos TODO el trabajo al GameProvider. 
             // Esto guarda en local, guarda en la nube y nos devuelve los niveles.
             const { nivelAntiguo, nivelNuevo } = ganarExperiencia(25); 
-            // 2. Comprobamos si hay que sacar el modal de aviso de huevo
+            // Comprobamos si hay que sacar el modal de aviso de huevo
             revisarEvolucion(nivelAntiguo, nivelNuevo);
-            // 3. Preparamos la siguiente ronda
+            // Preparamos la siguiente ronda
             nuevaOperacion();  
             reset();           
         } else {
@@ -100,7 +100,7 @@ const Dashboard = () => {
         setTimeout(() => setMensajeFeedback(''), 2000);
     };
 
-    // --- LÓGICA DE ESTADO DERIVADO decide qué dinosaurio se ve en pantalla en cada segundo.---
+    // LÓGICA DE ESTADO DERIVADO decide qué dinosaurio se ve en pantalla en cada segundo
     // Preparamos una variable vacía que llenaremos con la fase correcta
     let datosMascota = null;
     // Primero comprobamos que hay una mascota elegida para no romper el código
