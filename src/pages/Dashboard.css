@@ -9,6 +9,23 @@
   gap: 20px;
 }
 
+.sincronizacion {
+  position: fixed;
+  margin-top: 20px;
+  margin-right: 20px;
+  background-color: rgba(0, 0, 0, 0.8);
+  color: white;
+  padding: 10px 20px;
+  border-radius: 30px;
+  font-size: 14px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  z-index: 10000;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+  border: 1px solid rgba(255,255,255,0.1);
+}
+
 #container-dashboard {
   width: 100%;
   max-width: 900px;

@@ -22,6 +22,7 @@ const Dashboard = () => {
     // Estados locales para UI
     const [mostrarModal, setMostrarModal] = useState(false);
     const [mensajeFeedback, setMensajeFeedback] = useState('');
+    const [sincronizando, setSincronizando] = useState(false);
 
     // Contexto de usuario
     const { user, token, loginAuth } = useContext(AuthContext);
@@ -30,7 +31,7 @@ const Dashboard = () => {
     useEffect(() => {
         const sincronizarDatos = async () => {
             if (!user?._id || !token) return;
-
+            setSincronizando(true)
             try {
                 const response = await fetch(`${import.meta.env.VITE_API_URL}/users/${user._id}`, {
                     method: "GET",
@@ -46,6 +47,8 @@ const Dashboard = () => {
                 }
             } catch (error) {
                 console.log("Error sincronizando", error);
+            } finally {
+                setSincronizando(false)
             }
         };
 
@@ -124,6 +127,13 @@ const Dashboard = () => {
 
     return (
         <div className="dashboard">
+            {/* 🚀 CARTELITO DE SINCRONIZACIÓN FLOTANTE */}
+            {sincronizando && (
+                <div className="sincronizacion">
+                    <span className="spinner-emoji" style={{ fontSize: '18px' }}>⏳</span> 
+                    Sincronizando partida...
+                </div>
+        )}
             <h2>Centro de Entrenamiento</h2>
             
             <div id="container-dashboard">
