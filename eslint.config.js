@@ -26,7 +26,7 @@ rules: {
   // Variables sin usar: warn en vez de error, e ignora las que empiezan por _ o mayúscula
   'no-unused-vars': ['off', { 
     varsIgnorePattern: '^[A-Z_]', 
-    argsIgnorePattern: '^_' 
+    argsIgnorePattern: '^_'
   }],
 
   // React no necesita importarse en proyectos modernos (React 17+)

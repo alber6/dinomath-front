@@ -37,6 +37,7 @@ const GameProvider = ({ children }) => {
         // Si la mascota que manda la Nube es diferente a la que estás viendo 
         // en pantalla (mascotaGlobal), la cambiamos automáticamente de golpe.
         if (nombreDefinitivo && nombreDefinitivo !== mascotaGlobal) {
+            // eslint-disable-next-line react-hooks/set-state-in-effect
             setMascotaGlobal(nombreDefinitivo);
         }
 
@@ -47,7 +48,7 @@ const GameProvider = ({ children }) => {
             setXp(datosReales.xp);
             setNivel(datosReales.nivel);
         }
-        
+    
     }, [user, mascotaGlobal]);
 
     // Cada vez que ganemos XP o subamos de nivel, actualizamos la "memoria a corto plazo" (localStorage)
@@ -172,10 +173,8 @@ const ganarExperiencia = (puntosGanados) => {
     // Usamos Math.min(..., 5) para que el límite NUNCA supere las 5 familias existentes.
     const limiteMascotas = Math.min(1 + familiasEnNivelProgreso, 5);
 
-    // Verificamos si puede adoptar:
-    // Debe tener menos mascotas de las que su límite actual permite.
-    // Y por seguridad, debe tener menos de 5 (el total de familias del juego).
-    // modificar el 5 si se amplia la dinodex
+    // Verificamos si puede adoptar: Debe tener menos mascotas de las que su límite actual permite.
+    // Y por seguridad, debe tener menos de 5 (el total de familias del juego). Y modificar el 5 si se amplia la dinodex
     const puedeAdoptar = mascotasActuales < limiteMascotas && mascotasActuales < 5;
 
     return (
