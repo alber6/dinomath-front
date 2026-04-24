@@ -5,13 +5,9 @@
 }
 
 /* Ocultar scrollbar a nivel global */
-body {
-  scrollbar-width: none; 
-  -ms-overflow-style: none; 
-}
 body::-webkit-scrollbar {
   display: none;
-}
+} 
 
 /* --- CONTENEDOR PRINCIPAL --- */
 .App {
