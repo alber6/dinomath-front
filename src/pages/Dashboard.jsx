@@ -28,10 +28,12 @@ const Dashboard = () => {
     const { user, token, loginAuth } = useContext(AuthContext);
 
     // --- Sincronización en segundo plano de los dtos por si quieres seguir la partida en tu navegador que ya te ha reconocido o si vas a otro dispositvo que al entrar se haya sincronizdo los últimos datos de la partida ---
-    useEffect(() => {
+useEffect(() => {
         const sincronizarDatos = async () => {
             if (!user?._id || !token) return;
-            setSincronizando(true)
+            
+            setSincronizando(true);
+            
             try {
                 const response = await fetch(`${import.meta.env.VITE_API_URL}/users/${user._id}`, {
                     method: "GET",
@@ -40,21 +42,28 @@ const Dashboard = () => {
                     },
                     cache: 'no-store' // Obliga a ir al servidor real siempre
                 });
-
                 if (response.ok) {
                     const datosFrescos = await response.json();
-                    loginAuth(datosFrescos, token); 
+                    
+                    // 🚀 EL FRENO DE SEGURIDAD (Deep Equality)
+                    // Tomamos la "foto panorámica" de la nube y la local
+                    const fotoNube = JSON.stringify(datosFrescos);
+                    const fotoLocal = JSON.stringify(user);
+                    // Si hay CUALQUIER diferencia (nivel, XP, mascota activa...), actualizamos.
+                    // Si son idénticos, nos saltamos el loginAuth y evitamos el bucle infinito.
+                    if (fotoNube !== fotoLocal) {
+                        loginAuth(datosFrescos, token); 
+                    }
                 }
             } catch (error) {
                 console.log("Error sincronizando", error);
             } finally {
-                setSincronizando(false)
+                setSincronizando(false);
             }
         };
-
+        // 1. Ejecución inicial
         sincronizarDatos();
-
-        // visibilitychange detecta perfectamente cuando cambias de pestaña o minimizas
+        // 2. visiblitychange para cuando cambias de dispositivo/pestaña
         const manejarCambioDePantalla = () => {
             if (document.visibilityState === 'visible') {
                 sincronizarDatos();
@@ -65,7 +74,9 @@ const Dashboard = () => {
 
         return () => document.removeEventListener('visibilitychange', manejarCambioDePantalla);
 
-    }, [user?._id, token, loginAuth]);
+    // Añadimos 'user' a las dependencias porque lo usamos para hacer la foto local.
+    // React lo ejecutará si 'user' cambia, pero nuestro "freno" parará el bucle.
+    }, [user, user?._id, token, loginAuth]);
 
     // --- Generar primera operación ---
     useEffect(() => {
