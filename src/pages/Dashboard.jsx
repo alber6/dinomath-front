@@ -1,4 +1,4 @@
-import React, { useContext, useState, useEffect } from "react";
+import React, { useContext, useState, useEffect, useRef } from "react";
 import { useForm } from "react-hook-form";
 import { Link, useNavigate } from "react-router-dom";
 
@@ -26,31 +26,35 @@ const Dashboard = () => {
 
     // Contexto de usuario
     const { user, token, loginAuth } = useContext(AuthContext);
+    // Guarda los datos más recientes del usuario sin provocar recargas y así no aparece todo el rato que el user se modifica el aviso de sincronización...
+    const userRef = useRef(user);
+    useEffect(() => {
+        userRef.current = user;
+    }, [user]);
 
-    // --- Sincronización en segundo plano de los dtos por si quieres seguir la partida en tu navegador que ya te ha reconocido o si vas a otro dispositvo que al entrar se haya sincronizdo los últimos datos de la partida ---
-useEffect(() => {
+    // --- Sincronización en segundo plano ---
+    useEffect(() => {
         const sincronizarDatos = async () => {
-            if (!user?._id || !token) return;
+            // Usamos userRef.current en lugar de user
+            if (!userRef.current?._id || !token) return;
             
             setSincronizando(true);
             
             try {
-                const response = await fetch(`${import.meta.env.VITE_API_URL}/users/${user._id}`, {
+                const response = await fetch(`${import.meta.env.VITE_API_URL}/users/${userRef.current._id}`, {
                     method: "GET",
                     headers: {
                         "Authorization": `Bearer ${token}` 
                     },
-                    cache: 'no-store' // Obliga a ir al servidor real siempre
+                    cache: 'no-store' 
                 });
+
                 if (response.ok) {
                     const datosFrescos = await response.json();
                     
-                    // 🚀 EL FRENO DE SEGURIDAD (Deep Equality)
-                    // Tomamos la "foto panorámica" de la nube y la local
                     const fotoNube = JSON.stringify(datosFrescos);
-                    const fotoLocal = JSON.stringify(user);
-                    // Si hay CUALQUIER diferencia (nivel, XP, mascota activa...), actualizamos.
-                    // Si son idénticos, nos saltamos el loginAuth y evitamos el bucle infinito.
+                    const fotoLocal = JSON.stringify(userRef.current);
+
                     if (fotoNube !== fotoLocal) {
                         loginAuth(datosFrescos, token); 
                     }
@@ -61,9 +65,9 @@ useEffect(() => {
                 setSincronizando(false);
             }
         };
-        // 1. Ejecución inicial
+
         sincronizarDatos();
-        // 2. visiblitychange para cuando cambias de dispositivo/pestaña
+
         const manejarCambioDePantalla = () => {
             if (document.visibilityState === 'visible') {
                 sincronizarDatos();
@@ -74,9 +78,9 @@ useEffect(() => {
 
         return () => document.removeEventListener('visibilitychange', manejarCambioDePantalla);
 
-    // Añadimos 'user' a las dependencias porque lo usamos para hacer la foto local.
-    // React lo ejecutará si 'user' cambia, pero nuestro "freno" parará el bucle.
-    }, [user, user?._id, token, loginAuth]);
+    // 👇 LOS CORCHETES VACÍOS: El secreto para que NO salte al escribir o hacer sumas
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, []);
 
     // --- Generar primera operación ---
     useEffect(() => {
