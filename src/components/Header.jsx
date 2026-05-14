@@ -32,6 +32,7 @@ if (mascotaGlobal) {
         console.warn(`La mascota "${mascotaGlobal}" no está en la DINODEX`);
     }
 }
+
     return (
         <header>
             <h1>DinoMath</h1>
@@ -40,8 +41,8 @@ if (mascotaGlobal) {
             {user && (
                 <div className="stats-jugador">
                     <p>Jugador: {user.username}</p>
-                    <p>Mascota: {nombreMascota}</p>
-                    <p>Nivel: {nivel} | XP: {xp}</p>
+                    <p>Mascota: {user?.mascotaActiva?.nombre || "Huevo misterioso"}</p>
+                    <p>Nivel: {user?.mascotaActiva?.nivel || 0} | XP: {user?.mascotaActiva?.xp || 0}</p>
                 </div>
             )}
         </header>
