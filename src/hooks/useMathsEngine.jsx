@@ -1,55 +1,114 @@
-import React, { useCallback, useState} from "react";
+import { useCallback, useState } from "react";
 
 export const useMathsEngine = () => {
-    //añadimos dos numeros que serán los que se sumen
-    const [ num1, setNum1 ] = useState(0);
-    const [ num2, setNum2 ] = useState(0);
-    const [operador, setOperador] = useState("+")
+    const [num1, setNum1] = useState(() => Number(localStorage.getItem('dino_n1')) || 0);
+    const [num2, setNum2] = useState(() => Number(localStorage.getItem('dino_n2')) || 0);
+    const [operador, setOperador] = useState(() => localStorage.getItem('dino_op') || "+");
 
-    //funcion para inventar operaciones con num1 y num2
-    //habría que añadir useCallback, sino peta el navegador porque crea copias nuevas cada vez que se repinta la pantalla, y eso no es necesario.
-    //como esta función nuevaOperacion siempre hace lo mismo, con useCallback hacemos que la memorice
-    // resumen, useCallback ayuda a que useEffect(nuevaOperacion) no se vuelva loco y se repita todo el rato
-    // cuando la función cambie
-    const nuevaOperacion = useCallback(() => {
-        // Decidir al azar si toca suma o resta (50% de probabilidad) si sale mayor de 50, esResta es true entonces toca restar
-        const esResta = Math.random() > 0.5;
-        
-        //generar numeros entre 20 y 150
-        // Math.random() * 131 genera de 0 a 130. Al sumarle 20, va de 20 a 150.
-        let n1 = Math.floor(Math.random() * 131) + 20;
-        let n2 = Math.floor(Math.random() * 131) + 20;
+    // 🌟 NUEVO: Ahora recibe también el nivel del dinosaurio
+    const nuevaOperacion = useCallback((esModoEpico = false, nivelActual = 1) => {
+        let n1, n2, nuevoOperador;
 
-        // Lógica para la resta: El número mayor siempre debe ir primero para no dar negativos
-        if (esResta) {
-            if (n2 > n1) {
-                //si n2 es mayor que n1, hay que darle la vuelta y poner a n1 mayor que n2 paea eso usamos una variable intermedia llamada temp
-                const temp = n1;
-                n1 = n2;
-                n2 = temp;
+        if (esModoEpico) {
+            // LÓGICA DE PROGRESIÓN ÉPICA
+            const opciones = ['basica']; // Nivel 1 a 4
+            if (nivelActual >= 5) opciones.push('media'); // Añadimos 1x2 cifras
+            if (nivelActual >= 10) opciones.push('ceros'); // Añadimos x10, x100...
+            if (nivelActual >= 20) opciones.push('division'); // Añadimos divisiones
+
+            // Elegimos una operación al azar de las que tenga desbloqueadas
+            const elegida = opciones[Math.floor(Math.random() * opciones.length)];
+
+            if (elegida === 'division') {
+                // Fabricamos una división exacta (ej. 3 x 4 = 12 -> 12 ÷ 3 = 4)
+                const divisor = Math.floor(Math.random() * 9) + 2; // del 2 al 10
+                const resultado = Math.floor(Math.random() * 9) + 2; // del 2 al 10
+                n1 = divisor * resultado; 
+                n2 = divisor;
+                nuevoOperador = '÷';
+
+            } else if (elegida === 'ceros') {
+                n1 = Math.floor(Math.random() * 89) + 11; // del 11 al 99
+                const multiplos = [10, 100, 1000];
+                n2 = multiplos[Math.floor(Math.random() * multiplos.length)];
+                if (Math.random() > 0.5) [n1, n2] = [n2, n1]; // A veces desordena
+                nuevoOperador = 'x';
+
+            } else if (elegida === 'media') {
+                n1 = Math.floor(Math.random() * 89) + 11; // 11 al 99 (2 cifras)
+                n2 = Math.floor(Math.random() * 8) + 2; // 2 al 9 (1 cifra)
+                if (Math.random() > 0.5) [n1, n2] = [n2, n1]; // A veces desordena
+                nuevoOperador = 'x';
+
+            } else {
+                // Básica (Tablas normales)
+                n1 = Math.floor(Math.random() * 9) + 2; // 2 al 10
+                n2 = Math.floor(Math.random() * 9) + 2; // 2 al 10
+                nuevoOperador = 'x';
             }
-            setOperador('-');
+
         } else {
-            setOperador('+');
+            // LÓGICA CLÁSICA: Sumas y Restas (Dinos normales)
+            const esResta = Math.random() > 0.5;
+            let numRandom1 = Math.floor(Math.random() * 131) + 20;
+            let numRandom2 = Math.floor(Math.random() * 131) + 20;
+
+            if (esResta) {
+                if (numRandom2 > numRandom1) {
+                    const temp = numRandom1;
+                    numRandom1 = numRandom2;
+                    numRandom2 = temp;
+                }
+                nuevoOperador = '-';
+            } else {
+                nuevoOperador = '+';
+            }
+            n1 = numRandom1;
+            n2 = numRandom2;
         }
 
         setNum1(n1);
         setNum2(n2);
+        setOperador(nuevoOperador);
+
+        localStorage.setItem('dino_n1', n1);
+        localStorage.setItem('dino_n2', n2);
+        localStorage.setItem('dino_op', nuevoOperador);
     }, []);
 
-// Comprobar lo que escribe el usuario
-    const comprobarResultado = (respuestaUsuario) => {
-        // Calculamos cuál es la respuesta correcta dependiendo del signo
-        let resultadoCorrecto;
-        if (operador === '+') {
-            resultadoCorrecto = num1 + num2;
+    // 🌟 NUEVO: cargarOperacionSegura también recibe el nivel para pasárselo a nuevaOperacion si toca hacer una
+    const cargarOperacionSegura = useCallback((esModoEpico = false, nivelActual = 1) => {
+        const guardadoOp = localStorage.getItem('dino_op');
+        const guardadoN1 = localStorage.getItem('dino_n1');
+        
+        // Verificamos si la guardada es épica ('x' o '÷')
+        const esOperacionEpica = guardadoOp === 'x' || guardadoOp === '÷';
+
+        if (!guardadoN1 || !guardadoOp || (esModoEpico !== esOperacionEpica)) {
+            nuevaOperacion(esModoEpico, nivelActual);
         } else {
-            resultadoCorrecto = num1 - num2;
+            setNum1(Number(guardadoN1));
+            setNum2(Number(localStorage.getItem('dino_n2')));
+            setOperador(guardadoOp);
         }
-        // convertimos lo que escribe el usuario a Número y usamos '===' (estrictamente igual).
-        return Number(respuestaUsuario) === resultadoCorrecto;
+    }, [nuevaOperacion]);
+
+    const comprobarResultado = (respuestaUsuario) => {
+        let resultadoCorrecto;
+        if (operador === '+') resultadoCorrecto = num1 + num2;
+        else if (operador === '-') resultadoCorrecto = num1 - num2;
+        else if (operador === 'x') resultadoCorrecto = num1 * num2;
+        else if (operador === '÷') resultadoCorrecto = num1 / num2; // 🌟 NUEVO: Resolver división
+        
+        const esCorrecto = Number(respuestaUsuario) === resultadoCorrecto;
+
+        if (esCorrecto) {
+            localStorage.removeItem('dino_n1');
+            localStorage.removeItem('dino_n2');
+            localStorage.removeItem('dino_op');
+        }
+        return esCorrecto;
     };
 
-    return { num1, num2, operador, nuevaOperacion, comprobarResultado };
-
-}
+    return { num1, num2, operador, nuevaOperacion, cargarOperacionSegura, comprobarResultado };
+};

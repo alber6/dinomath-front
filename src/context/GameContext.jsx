@@ -95,29 +95,37 @@ const GameProvider = ({ children }) => {
     };
 
 const ganarExperiencia = (puntosGanados) => {
-        const nuevaXp = xp + puntosGanados;
-        let nuevoNivel = nivel;
-        let xpFinal = nuevaXp;
+    // Calcular límite de la mascota si es rex u otro dino
+    const nivelMaximo = mascotaGlobal === 'rex' ? 200 : 100;
 
-        if (nuevaXp >= 100) {
-            nuevoNivel = nivel + 1;
-            xpFinal = nuevaXp - 100;
-        }
+    // Añadir para que no se pueda subir más del nivel máximo
+    if (nivel >= nivelMaximo) {
+        return { nivelAntiguo: nivel, nivelNuevo: nivel }; 
+    }
 
-        // Actualizamos la pantalla (estado local)
-        setNivel(nuevoNivel);
-        setXp(xpFinal);
-        // Buscamos a esta mascota en la Colección
-        const petsActualizadas = user.pets.map(p => 
-            p.nombre === mascotaGlobal 
-            ? { ...p, nivel: nuevoNivel, xp: xpFinal } 
-            : p
-        );
+    const nuevaXp = xp + puntosGanados;
+    let nuevoNivel = nivel;
+    let xpFinal = nuevaXp;
 
-        // Mandamos los datos a la nube (LA ÚNICA VEZ QUE SE LLAMA)
-        guardarEnBackend(mascotaGlobal, xpFinal, nuevoNivel, petsActualizadas);
-        // 🚀 AÑADIMOS ESTO: Devolvemos los niveles para el modal
-        return { nivelAntiguo: nivel, nivelNuevo: nuevoNivel };
+    if (nuevaXp >= 100) {
+        nuevoNivel = nivel + 1;
+        xpFinal = nuevaXp - 100;
+    }
+
+    // Actualizamos la pantalla (estado local)
+    setNivel(nuevoNivel);
+    setXp(xpFinal);
+    // Buscamos a esta mascota en la Colección
+    const petsActualizadas = user.pets.map(p => 
+        p.nombre === mascotaGlobal 
+        ? { ...p, nivel: nuevoNivel, xp: xpFinal } 
+        : p
+    );
+
+    // Mandamos los datos a la nube (LA ÚNICA VEZ QUE SE LLAMA)
+    guardarEnBackend(mascotaGlobal, xpFinal, nuevoNivel, petsActualizadas);
+    // 🚀 AÑADIMOS ESTO: Devolvemos los niveles para el modal
+    return { nivelAntiguo: nivel, nivelNuevo: nuevoNivel };
     };
 
     const reinicioPartida = () => {

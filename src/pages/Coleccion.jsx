@@ -41,8 +41,15 @@ const Coleccion = () => {
                     const nivelUsuario = mascotaUsuario ? mascotaUsuario.nivel : 0;
                     const xpUsuario = mascotaUsuario ? mascotaUsuario.xp : 0;
 
+                    // Calculamos el nivel máximo de esta familia
+                    const nivelMaximo = nombreFamilia === 'rex' ? 200 : 100;
+                    const haLlegadoAlMaximo = nivelUsuario >= nivelMaximo;
+
                     // Calculamos cuál es la fase más alta que tiene desbloqueada
                     const faseActual = lineaEvolutiva.slice().reverse().find(dino => nivelUsuario >= dino.nivelReq) || lineaEvolutiva[0];
+
+                    // 🌟 NUEVO: Comprobamos si la familia completa es épica mirando el primer huevo
+                    const esFamiliaMitica = lineaEvolutiva[0]?.esEpico;
 
                     return (
                         <div className="familia-row" key={nombreFamilia}>
@@ -55,9 +62,13 @@ const Coleccion = () => {
                                 const esEquipable = estaDesbloqueado && fase.id === faseActual.id;
                                 const estaEntrenando = esEquipable && user.mascotaActiva?.nombre === nombreFamilia;
 
+                                // 🌟 NUEVO: ¿Esta carta debe ser dorada?
+                                // Solo brilla si llegó al nivel máximo Y es la carta de su fase actual (la más alta)
+                                const mostrarDorada = haLlegadoAlMaximo && esEquipable;
+
                                 return (
-                                    // Le ponemos una clase u otra según si lo ha desbloqueado
-                                    <div className={`dinodex-card ${estaDesbloqueado ? 'desbloqueado' : 'bloqueado'}`} key={fase.id}>
+                                    // 🌟 MODIFICADO: Añadimos dinámicamente 'carta-mitica' si corresponde
+                                    <div className={`dinodex-card ${estaDesbloqueado ? 'desbloqueado' : 'bloqueado'} ${mostrarDorada ? 'carta-dorada' : ''} ${esFamiliaMitica ? 'carta-mitica' : ''}`} key={fase.id}>
                                         
                                         <h3>{estaDesbloqueado ? fase.nombre : "???"}</h3>
                                         
@@ -70,7 +81,7 @@ const Coleccion = () => {
                                         </div>
 
                                         {estaDesbloqueado ? (
-                                            <p>Desbloqueado en Nvl {fase.nivelReq}</p>
+                                            <p>{mostrarDorada ? `👑 MAX (${nivelMaximo})` : `Desbloqueado en Nvl ${fase.nivelReq}`}</p>
                                         ) : (
                                             <p>Secreto 🔒</p>
                                         )}
@@ -103,18 +114,10 @@ const Coleccion = () => {
             </Link>
             
             {/* Si el juego está completado o si puede adoptar */}
-            {juegoCompletado ? (
-                <button disabled style={{ opacity: 0.6, cursor: 'not-allowed' }}>
-                    🏆 ¡Colección Completa! 🏆
-                </button>
-            ) : puedeAdoptar ? (
+            {!juegoCompletado && puedeAdoptar && (
                 <Link to="/choose">
                     <button>Adoptar Nuevo Huevo 🥚</button>
                 </Link>
-            ) : (
-                <button disabled style={{ opacity: 0.6, cursor: 'not-allowed' }}>
-                    🔒 Evoluciona al máximo a tu mascota actual
-                </button>
             )}
         </div>
     );

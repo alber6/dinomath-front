@@ -9,6 +9,52 @@
   gap: 20px;
 }
 
+/* =========================================
+   🏆 SALÓN DE LA FAMA (VERSIÓN OPTIMIZADA)
+   ========================================= */
+
+/* Fondo oscuro con luz central */
+.dashboard-maximo {
+    background: radial-gradient(circle, #e69c24 0%, #120b01 100%) !important;
+    min-height: 100vh;
+    border-radius: 15px;
+}
+
+/* Título brillante */
+.dashboard-maximo h2 {
+    color: #fff !important;
+    text-shadow: 0 0 15px #ffd700;
+}
+
+/* Contenedor amplio: display flex y 'gap' separan la imagen del texto */
+.dashboard-maximo #container-dashboard {
+    background: rgba(255, 255, 255, 0.9) !important;
+    border: 4px solid #ffd700 !important;
+    border-radius: 15px;
+    padding: 40px !important;
+    display: flex;
+    gap: 40px; 
+    align-items: center;
+    justify-content: center;
+}
+
+/* Resplandor del Dino */
+.dashboard-maximo #petImg img {
+    filter: drop-shadow(0px 0px 20px #ffd700) !important;
+    transform: scale(1.1);
+}
+
+/* Placa dorada de leyenda */
+.dashboard-maximo .entrenamiento-maximo {
+    background: linear-gradient(135deg, #fcf6ba, #bf953f) !important;
+    color: #000 !important;
+    border: 2px solid #aa771c !important;
+    border-radius: 10px;
+    padding: 20px !important;
+    margin-top: 15px;
+}
+
+
 .sincronizacion {
   position: fixed;
   margin-top: 20px;
@@ -71,17 +117,132 @@
   color: #2D3748;
 }
 
+/* =========================================
+   🌌 MODO ÉPICO: DASHBOARD MÍTICO (REDISEÑO)
+   ========================================= */
+
+/* Fondo general profundo */
+.dashboard.dashboard-mitico {
+    background: linear-gradient(135deg, #290053 0%, #4b008e 100%);
+    color: #ffffff;
+    border-radius: 15px;
+    padding: 20px;
+}
+
+/* Título Principal (Cyan Neón) */
+.dashboard.dashboard-mitico h2 {
+    color: #ffffff;
+    font-size: 2.2rem;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    text-shadow: 0 0 5px #00ffff, 0 0 15px #00ffff, 0 0 30px #00ffff;
+    margin-bottom: 30px;
+}
+
+/* Nombre del Dinosaurio (Resplandor Lila) */
+.dashboard.dashboard-mitico #petInfo h3 {
+    color: #ffffff;
+    font-size: 1.8rem;
+    text-shadow: 0 0 5px #b366ff, 0 0 15px #b366ff;
+    text-transform: uppercase;
+    margin-bottom: 10px;
+}
+
+/* Caja de Estadísticas (Nivel y XP enmarcada) */
+.dashboard.dashboard-mitico #petInfo p:first-of-type {
+    background: rgba(45, 0, 77, 0.6);
+    border: 2px solid #b366ff;
+    box-shadow: 0 0 10px rgba(179, 102, 255, 0.5), inset 0 0 10px rgba(179, 102, 255, 0.3);
+    border-radius: 8px;
+    padding: 10px 20px;
+    display: inline-block;
+    font-weight: bold;
+    letter-spacing: 1px;
+    margin-bottom: 30px;
+}
+
+/* Contenedor de la Operación Matemática */
+.dashboard.dashboard-mitico #operation {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 10px;
+}
+
+/* Texto de la Operación (Mucho más grande y visible) */
+.dashboard.dashboard-mitico #operation p {
+    font-size: 2rem;
+    font-weight: bold;
+    color: #ffffff;
+    text-shadow: 0 0 5px #00ffff, 0 0 15px #00ffff;
+    /* Reseteamos el diseño por si hereda la caja lila de las estadísticas */
+    background: transparent;
+    border: none;
+    box-shadow: none;
+    padding: 0;
+    margin: 0;
+}
+
+/* Campo de Input Numérico (Estilo Cyberpunk) */
+.dashboard.dashboard-mitico #operation input {
+    background-color: rgba(26, 0, 51, 0.9);
+    color: #ffffff;
+    font-size: 1.8rem;
+    font-weight: bold;
+    text-align: center;
+    border: 3px solid #00ffff;
+    border-radius: 8px;
+    padding: 10px;
+    width: 190px;
+    box-shadow: 0 0 15px rgba(0, 255, 255, 0.4), inset 0 0 10px rgba(0, 255, 255, 0.2);
+    outline: none;
+    transition: box-shadow 0.3s ease;
+}
+
+/* Que brille más cuando el niño hace clic para escribir */
+.dashboard.dashboard-mitico #operation input:focus {
+    box-shadow: 0 0 25px rgba(0, 255, 255, 0.8), inset 0 0 15px rgba(0, 255, 255, 0.5);
+}
+
+.dashboard.dashboard-mitico #operation input::placeholder {
+    color: rgba(255, 255, 255, 0.3);
+    font-size: 1.2rem;
+}
+
+/* Botón RESPONDER (Amarillo vibrante para máximo contraste) */
+.dashboard.dashboard-mitico button[type="submit"] {
+    background: #ffd700;
+    color: #000000;
+    font-size: 1.3rem;
+    font-weight: 900;
+    text-transform: uppercase;
+    border: none;
+    border-radius: 8px;
+    padding: 12px 35px;
+    cursor: pointer;
+    box-shadow: 0 5px 0 #ccaa00, 0 0 15px rgba(255, 215, 0, 0.5);
+    transition: all 0.1s ease;
+    letter-spacing: 1px;
+}
+
+/* Efecto al pulsar el botón */
+.dashboard.dashboard-mitico button[type="submit"]:active {
+    transform: translateY(5px);
+    box-shadow: 0 0 0 #ccaa00, 0 0 10px rgba(255, 215, 0, 0.3);
+}
+
 /* --- BOTONES DE NAVEGACIÓN (ABAJO) --- */
-/* Te recomiendo envolver tus botones de abajo en un div llamado .nav-buttons */
 .nav-buttons {
   width: 100%;
   display: flex;
   justify-content: center;
+  align-items: center;
   flex-wrap: wrap;
   gap: 15px;
   padding-bottom: 20px;
   border-top: 2px solid #898989; 
-  padding-top: 70px;
+  padding-top: 10px;
 }
 
 #form {
