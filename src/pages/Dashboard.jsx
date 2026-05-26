@@ -12,7 +12,7 @@ import "./Dashboard.css";
 
 const Dashboard = () => {
     const { mascotaGlobal, xp, nivel, ganarExperiencia, puedeAdoptar, guardarEnBackend } = useContext(GameContext);
-    const { num1, num2, operador, nuevaOperacion, comprobarResultado } = useMathsEngine();
+    const { num1, num2, operador, nuevaOperacion, comprobarResultado, cargarOperacionSegura } = useMathsEngine();
     const { juegoCompletado } = useMascotas();
     const navigate = useNavigate();
 
@@ -78,14 +78,22 @@ const Dashboard = () => {
 
         return () => document.removeEventListener('visibilitychange', manejarCambioDePantalla);
 
-    // 👇 LOS CORCHETES VACÍOS: El secreto para que NO salte al escribir o hacer sumas
+    // LOS CORCHETES VACÍOS: El secreto para que NO salte al escribir o hacer sumas
     // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
-    // --- Generar primera operación ---
+    // Calculamos el nivel máximo para mostrarlo en pantalla
+    const nivelMaximo = mascotaGlobal === 'rex' ? 200 : 100;
+    const esNivelMaximo = nivel >= nivelMaximo; // para decirnos que ya no puede subir más
+    // Busca en toda la cuenta del usuario si AL MENOS una mascota es nivel 50 o más
+    // 🌟 NUEVO: Lo calculamos aquí arriba para que TODAS las funciones puedan verlo
+    const infoMascota = DINODEX[mascotaGlobal]?.[0];
+    const esMascotaEpica = infoMascota?.esEpico || false;
+
+// --- Generar o cargar operación de forma segura (Anti-Trampas) ---
     useEffect(() => {
-        nuevaOperacion();
-    }, [nuevaOperacion]);
+        cargarOperacionSegura(esMascotaEpica, nivel);
+    }, [cargarOperacionSegura, esMascotaEpica, nivel]);
 
     // --- LÓGICA DE EVOLUCIÓN ---
     const revisarEvolucion = (nivelAntiguo, nivelNuevo) => {
@@ -108,8 +116,9 @@ const Dashboard = () => {
             // Comprobamos si hay que sacar el modal de aviso de huevo
             revisarEvolucion(nivelAntiguo, nivelNuevo);
             // Preparamos la siguiente ronda
-            nuevaOperacion();  
-            reset();           
+            // Le pasamos el interruptor épico para que sepa qué generar
+            nuevaOperacion(esMascotaEpica, nivelNuevo);
+            reset();
         } else {
             setMensajeFeedback('Mmm... casi. ¡Vuelve a intentarlo! 💪');
             reset(); 
@@ -139,9 +148,38 @@ const Dashboard = () => {
         };
     }
 }
+   // SISTEMA DE TOKENS (Billetes Dorados) para seguir el flujo de que aparezca el boton de adoptar huevo cuando el usuario tenga un dino con nivel 50 y pierda ese token hasta que consiga otro dino a nivel 50
+    const petsUsuario = user?.pets || [];
+    const nombresMascotas = petsUsuario.map(pet => pet.nombre);
+
+    // 1. Contamos cuántos dinosaurios NORMALES han llegado a 50 (Cada uno da 1 Token)
+    const tokensGanados = petsUsuario.filter(pet => {
+        const esMitico = DINODEX[pet.nombre]?.[0]?.esEpico;
+        return !esMitico && pet.nivel >= 50;
+    }).length;
+
+    // 2. Contamos cuántos dinosaurios MÍTICOS ya tiene el niño (Cada uno consume 1 Token)
+    const miticosAdoptados = petsUsuario.filter(pet => {
+        return DINODEX[pet.nombre]?.[0]?.esEpico;
+    }).length;
+
+    // 3. ¿Tiene algún Token sin gastar?
+    const paseVIPMitico = tokensGanados > miticosAdoptados;
+
+    // 4. El Escáner: ¿Quedan huevos en el juego que pueda adoptar AHORA MISMO?
+    const hayHuevosDisponibles = Object.keys(DINODEX).some((nombreDino) => {
+        if (nombresMascotas.includes(nombreDino)) return false; // Ya lo tiene
+        
+        const esMitico = DINODEX[nombreDino][0]?.esEpico;
+        // Si el huevo de la tienda es mítico, pero no le quedan tokens, no lo contamos
+        if (esMitico && !paseVIPMitico) return false; 
+        
+        return true; 
+    });
 
     return (
-        <div className="dashboard">
+       // Si es nivel máximo, añadimos la clase 'dashboard-maximo'
+        <div className={`dashboard ${esNivelMaximo ? 'dashboard-maximo' : ''} ${esMascotaEpica ? 'dashboard-mitico' : ''}`}>
             {/* 🚀 CARTELITO DE SINCRONIZACIÓN FLOTANTE */}
             {sincronizando && (
                 <div className="sincronizacion">
@@ -164,19 +202,28 @@ const Dashboard = () => {
                 {/* Zona de juego -- Formulario */}
                 <div id="petInfo">
                     <h3>{datosMascota?.nombre}</h3>
-                    <p>Nivel: {nivel} | XP: {xp}/100</p>
+                    <p>Nivel: {nivel} / {nivelMaximo} | XP: {xp}/100</p>
                     
-                    <form onSubmit={handleSubmit(alEnviarRespuesta)} id="form">
-                        <div id="operation">
-                            <p>{num1} {operador} {num2} = </p>
-                            <input 
-                                type="number"
-                                placeholder="Num"
-                                {...register("respuesta", { required: true })}
-                            />
+                    {/* Condicional para esconder el formulario si llegó al máximo */}
+                    {esNivelMaximo ? (
+                        <div className="entrenamiento-maximo" >
+                            <h3>👑 ¡Fuerza Máxima! 👑</h3>
+                            <p>Tu {datosMascota?.nombre} es una leyenda y ya no necesita entrenar.</p>
+                            <p><strong>Ve a la Colección para equipar y entrenar a otro dinosaurio.</strong></p>
                         </div>
-                        <button type="submit">Responder</button>
-                    </form>
+                    ) : (
+                        <form onSubmit={handleSubmit(alEnviarRespuesta)} id="form">
+                            <div id="operation">
+                                <p>{num1} {operador} {num2} = </p>
+                                <input 
+                                    type="number"
+                                    placeholder="Num"
+                                    {...register("respuesta", { required: true })}
+                                />
+                            </div>
+                            <button type="submit">Responder</button>
+                        </form>
+                    )}
                 </div>
             </div>
 
@@ -193,19 +240,11 @@ const Dashboard = () => {
                     <button id="goToColeccion">Colección</button>
                 </Link>
                 
-                {/* Lógica del botón de adoptar */}
-                {juegoCompletado ? (
-                    <button disabled style={{ opacity: 0.6, cursor: 'not-allowed' }}>
-                        🏆 ¡Colección Completa! 🏆
-                    </button>
-                ) : puedeAdoptar ? (
+              {/* 🌟 MODIFICADO: El botón solo aparece si el escáner confirma que hay algo en la tienda */}
+                {hayHuevosDisponibles && (
                     <Link to="/choose">
                         <button>Adoptar Nuevo Huevo 🥚</button>
                     </Link>
-                ) : (
-                    <button disabled style={{ opacity: 0.6, cursor: 'not-allowed' }}>
-                        🔒 Evoluciona al máximo a tu mascota actual
-                    </button>
                 )}
             </div>
 

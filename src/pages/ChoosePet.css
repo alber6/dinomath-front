@@ -72,3 +72,22 @@
   transform: translateY(-2px) scale(1.05);
   box-shadow: 0 4px 10px rgba(59, 76, 202, 0.3);
 }
+
+.eggCard.huevo-mitico {
+    border: 3px dashed #8a2be2; /* Borde morado para destacar */
+    background: rgba(138, 43, 226, 0.1);
+    position: relative;
+}
+
+.etiqueta-mitica-tienda {
+    position: absolute;
+    bottom: -15px;
+    left: 50%;
+    transform: translateX(-50%);
+    background: #4b0082;
+    color: white;
+    font-size: 0.7rem;
+    padding: 2px 8px;
+    border-radius: 10px;
+    white-space: nowrap;
+}

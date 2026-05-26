@@ -13,14 +13,38 @@ const ChoosePet = () => {
     const { elegirMascota, puedeAdoptar } = useContext(GameContext);
     const { user } = useContext(AuthContext);
 
+    // 🌟 NUEVO: SISTEMA DE TOKENS (Contamos dinos normales nivel 50 vs míticos adoptados)
+    const petsUsuario = user?.pets || [];
+    
+    const tokensGanados = petsUsuario.filter(pet => {
+        const esMitico = DINODEX[pet.nombre]?.[0]?.esEpico;
+        return !esMitico && pet.nivel >= 50;
+    }).length;
+
+    const miticosAdoptados = petsUsuario.filter(pet => {
+        return DINODEX[pet.nombre]?.[0]?.esEpico;
+    }).length;
+
+    // Solo se permite ver y adoptar huevos míticos si quedan "Billetes Dorados" sin gastar
+    const puedeAdoptarMiticos = tokensGanados > miticosAdoptados;
+
     // LÓGICA DE ESTADO DERIVADO
     // Calculamos las mascotas que el usuario ya tiene
-    const mascotasConseguidas = user?.pets?.map(mascota => mascota.nombre) || [];
+    const mascotasConseguidas = petsUsuario.map(mascota => mascota.nombre);
 
-    // Calculamos cuáles quedan libres
-    const mascotasDisponibles = Object.keys(DINODEX).filter(
-        (nombreDino) => !mascotasConseguidas.includes(nombreDino)
-    );
+    // Calculamos cuáles quedan libres, filtrando los míticos si no le quedan tokens
+    const mascotasDisponibles = Object.keys(DINODEX).filter((nombreDino) => {
+        // Si el usuario ya tiene este dinosaurio, lo descartamos
+        if (mascotasConseguidas.includes(nombreDino)) return false;
+
+        // ¿Es un dinosaurio mítico?
+        const esMitico = DINODEX[nombreDino][0]?.esEpico;
+        
+        // Si es mítico y el usuario NO tiene tokens disponibles, se lo ocultamos
+        if (esMitico && !puedeAdoptarMiticos) return false;
+
+        return true; 
+    });
 
     // Preparamos las tarjetas visuales (cortamos a 3 opciones)
     const opcionesParaAdoptar = mascotasDisponibles.slice(0, 3).map(nombreDino => {
@@ -28,7 +52,8 @@ const ChoosePet = () => {
         return {
             idDino: nombreDino,
             tipo: infoFase1.tipo,
-            imagenHuevo: infoFase1.egg
+            imagenHuevo: infoFase1.egg,
+            esMitico: infoFase1.esEpico
         };
     });
 
@@ -39,25 +64,25 @@ const ChoosePet = () => {
         navigate('/dashboard');
     };
 
-    // PROTECCIÓN DE RUTA (por si el usario le diera por cambiar la direccion de la url directamente) 
+    // PROTECCIÓN DE RUTA 
     useEffect(() => {
         if (!user) return;
         // Si es partida nueva, pase VIP
         if (!user.pets || user.pets.length === 0) return;
-        // Si ya tiene dinos pero NO tiene espacio, lo echamos de aquí
-        if (!puedeAdoptar) {
+        
+        // Te expulsa solo si el backend dice que no hay espacio común Y TAMPOCO tienes tokens míticos
+        if (!puedeAdoptar && !puedeAdoptarMiticos) {
             navigate("/dashboard");
         }
-    }, [user, puedeAdoptar, navigate]);
+    }, [user, puedeAdoptar, navigate, puedeAdoptarMiticos]);
 
     return (
         <div className="choose">
-            <h2>¡Elige la mascota que quieras!</h2>
+            <h2>{puedeAdoptarMiticos ? '¡Has desbloqueado Huevos Míticos!' : '¡Elige la mascota que quieras!'}</h2>
             
             <div className="botones">
-                {/* Pintamos las opciones de forma súper limpia */}
                 {opcionesParaAdoptar.map((opcion) => (
-                    <div className="eggCard" key={opcion.idDino}>
+                    <div className={`eggCard ${opcion.esMitico ? 'huevo-mitico' : ''}`} key={opcion.idDino}>
                         <button 
                             className={`btn-juego ${mascotaSeleccionada === opcion.idDino ? 'seleccionado' : ''}`} 
                             onClick={() => setMascotaSeleccionada(opcion.idDino)}
@@ -68,11 +93,11 @@ const ChoosePet = () => {
                             src={opcion.imagenHuevo} 
                             alt={`Huevo de ${opcion.tipo}`} 
                         />
+                        {opcion.esMitico && <span className="etiqueta-mitica-tienda">Multiplicaciones ✖️</span>}
                     </div>
                 ))} 
             </div>
 
-            {/* Si ha seleccionado uno, le mostramos el botón final */}
             {mascotaSeleccionada && (
                 <div className="buttonConfirmado">
                     <p>
