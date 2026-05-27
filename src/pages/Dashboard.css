@@ -411,6 +411,31 @@
   .juego-completado {
     padding: 15px;
   }
+
+  #container-dashboard {
+    flex-direction: column; 
+    gap: 20px;
+  }
+  
+  #petImg > img {
+    max-width: 280px; 
+  }
+  
+  #operation {
+    font-size: 1.2rem;
+  }
+  
+  .juego-completado {
+    padding: 15px;
+  }
+
+  /* 🌟 AJUSTES MODO MÍTICO (TABLET) */
+  .dashboard.dashboard-mitico h2 {
+    font-size: 1.8rem; /* Reducimos el título principal */
+  }
+  .dashboard.dashboard-mitico #operation p {
+    font-size: 1.6rem; /* Reducimos el texto de la operación */
+  }
 }
 
 /* Móviles estándar  */
@@ -434,6 +459,93 @@
   #operation {
     font-size: 1.2rem;
     width: 300px;
+    padding: 2px;
+  }
+
+  #operation input {
+    font-size: 1.1rem;
+  }
+
+  .modal-content {
+    padding: 25px 15px;
+  }
+  
+  .modal-buttons button {
+    padding: 10px;
+    font-size: 0.9rem;
+  }
+
+  .juego-completado h3 {
+    font-size: 0.9rem;
+  }
+
+  .juego-completado p {
+    font-size: 0.75rem;
+  }
+  
+  .botones-navegacion {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    align-items: center;
+  }
+  .dashboard {
+    gap: 10px;
+  }
+
+  .dashboard h2 {
+    font-size: 1.2rem;
+  }
+
+  #petImg > img {
+    max-width: 280px; 
+  }
+
+  #petInfo h3 {
+    font-size: 1.1rem;
+  }
+
+  /* 🌟 AJUSTES MODO MÍTICO (MÓVIL) */
+  .dashboard.dashboard-mitico h2 {
+    font-size: 1.3rem;
+    margin-bottom: 20px;
+  }
+  
+  .dashboard.dashboard-mitico #petInfo h3 {
+    font-size: 1.3rem;
+  }
+
+  .dashboard.dashboard-mitico #petInfo p:first-of-type {
+    font-size: 0.9rem;
+    padding: 8px 15px;
+    margin-bottom: 20px;
+  }
+
+  .dashboard.dashboard-mitico #operation {
+    max-width: 100%; /* Evita que desborde por los lados */
+  }
+
+  .dashboard.dashboard-mitico #operation p {
+    font-size: 1.4rem; /* Texto más contenido */
+    text-align: center;
+  }
+
+  .dashboard.dashboard-mitico #operation input {
+    font-size: 1.3rem;
+    width: 140px; /* Reducimos el input para que quepa bien */
+    padding: 8px;
+  }
+
+  .dashboard.dashboard-mitico button[type="submit"] {
+    font-size: 1.1rem;
+    padding: 10px 25px;
+  }
+
+  /* Ajustes base que ya tenías */
+  #operation {
+    font-size: 1.2rem;
+    width: 100%;
+    max-width: 300px;
     padding: 2px;
   }
 
